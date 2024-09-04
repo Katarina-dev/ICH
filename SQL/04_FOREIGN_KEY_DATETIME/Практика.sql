@@ -1,8 +1,5 @@
-/* 2. Заполнить таблицу тестовыми данными: 3-5 заказчиков и 
-с десяток ордеров так, чтобы у всех 
-заказчиков было разное количество заказов. */
-
 USE 050824_new;
+
 
 -- DROP TABLE IF EXISTS Customer_2;
 -- DROP TABLE IF EXISTS Orders_2;
@@ -205,32 +202,31 @@ SET discounter_price = 0.9 * price  WHERE order_id IN (13, 14) LIMIT 100;
 
 SELECT * FROM Orders_2 ORDER BY price DESC; 
 
-SELECT * 
 
-
-    SELECT * FROM Customer_2;
-    SELECT * FROM Orders_2;
-   
-   SELECT name, count(order_id) FROM Orders_2 GROUP BY name
+SELECT * FROM Customer_2;
+SELECT * FROM Orders_2;
    
    
-   UPDATE Orders_2 
+UPDATE Orders_2 
 SET discounter_price = 0.9 * price  WHERE order_id IN (13, 14) LIMIT 100;
 
+-- 1.Вывести все заказы, отсортированные по убыванию по стоимости
 SELECT * FROM Orders_2 ORDER BY price DESC;
 
+-- 2.Вывести всех заказчиков, у которых почта зарегистриварована на gmail.com
 SELECT * FROM Customer_2 
 WHERE email LIKE '%gmail.com';
 
+-- 3.Вывести заказы, добавив дополнительный вычисляемый столбец status, который вычисляется по стоимости заказа и имеет три значения: low, middle, high. 
 SELECT * ,
 CASE
 	WHEN price >= 60 THEN 'high'
 	WHEN price >= 30 THEN 'middle'
 	ELSE 'low'
     END AS status
-    
     FROM Orders_2;
-    
+
+-- 4.Вывести заказчиков по убыванию рейтинга.    
 ALTER TABLE Customer_2 
 ADD rating INTEGER;
 
@@ -238,3 +234,25 @@ UPDATE Customer_2 AS c
 SET rating = (SELECT count(order_id) FROM Orders_2 AS o WHERE o.customer_id = c.customer_id) LIMIT 100;
 
 SELECT last_name  FROM Customer_2 ORDER BY rating DESC;
+
+-- 5.Вывести всех заказчиков из города на ваш выбор. 
+SELECT * FROM Customer_2 WHERE City = 'Berlin';
+
+-- 6.Написать запрос, который вернет самый часто продаваемый товар. 
+SELECT product_name, COUNT(customer_id) FROM Orders_2 GROUP BY product_name ORDER by COUNT(customer_id) DESC LIMIT 1;
+
+-- 7.Вывести список заказов с максимальной скидкой. 
+SELECT DISTINCT product_name, (price - discounter_price) AS max_discount FROM Orders_2 WHERE price - discounter_price = (SELECT  MAX(price - discounter_price) FROM Orders_2);
+
+-- 8.Ответьте в 1 предложении: как вы определите скидку? 
+-- Как наибольшую разницу между оновной ценой и ценой со скидкой.
+
+-- 9.Ответьте в 1 предложении: может ли это быть разница между нормальной ценой и скидочной ценой? 
+-- Возможно, да. Я так и посчитала.
+
+-- 10.Написать запрос, который выведет все заказы с дополнительным столбцом процент_скидки, который содержит разницу в процентах между нормальной и скидочной ценой?
+UPDATE Orders_2
+SET discount = (price - discounter_price)/price*100 LIMIT 100;
+
+SELECT * FROM Orders_2;
+
