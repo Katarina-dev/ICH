@@ -1,0 +1,17 @@
+1.Установить python с сайта  python.org
+
+2.Установить виртуальное окружение.
+Открыть cmd C:\Users\user\Documents\Python\hw
+Запустить команду: python -m pip install virtualenv
+
+3.Создаем папку venv:
+python - m venv venv
+
+4.Активируем виртуальное окружение:
+venv\Scripts\activate.bat
+
+5.Устанавливаем jupyter lab
+pip install jupyterlab
+
+6.Запускаем jupyter
+jupyter lab
