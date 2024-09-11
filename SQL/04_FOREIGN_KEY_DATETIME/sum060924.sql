@@ -1,4 +1,5 @@
 USE 050824_ekmi;
+use ich;
 
 create table if not exists Students (
 student_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -14,6 +15,8 @@ create table if not exists Competencies (
 teacher_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 name_te varchar(128) NOT NULL,
 age integer);
+
+select * from Competencies;
 
 ALTER TABLE Competencies
 CHANGE teacher_id compet_id INTEGER; 
