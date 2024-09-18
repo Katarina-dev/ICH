@@ -59,7 +59,8 @@ create table new_students as
 	(select * 
     from 
     students);
+     
     
-select * from new_students;
+select * from 050824_hr.new_students;
+select * from ekmi.new_students;
     
--- drop table competencies;
