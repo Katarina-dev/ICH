@@ -25,12 +25,15 @@ insert into Students (first_name, last_name, age, email) values ('Darya', 'Lukov
 
 SHOW CREATE TABLE Students;
 
+create table 050824_hr.new_students as select
+employee_id, first_name, last_name, email from 050824_hr.employees;
+
 create table
 new_students as select * from 050824_hr.new_students;
 
-select first_name, last_name from Students
+select first_name, last_name from ekmi.Students
 union all
-select first_name, last_name from new_students;
+select first_name, last_name from 050824_hr.new_students;
 
 
 -- drop table Students;
