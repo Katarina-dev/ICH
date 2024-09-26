@@ -15,3 +15,4 @@ union all
 select Name, Population from world.country order by Name asc;
 
 select * from country;
+show create table country;
