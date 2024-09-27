@@ -1,8 +1,6 @@
 /* INNER JOIN (или просто JOIN) соединяет только те строки,
 которые имеют соответствие в обеих таблицах. */
 
-USE 050824_learning_join_command;
-
 SELECT * FROM employees;
 SELECT * FROM departments;
 

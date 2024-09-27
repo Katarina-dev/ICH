@@ -5,7 +5,6 @@
 MySQL не поддерживает этот тип соединения напрямую,
 но его можно симулировать с помощью UNION. */
 
-USE 050824_learning_join_command;
 
 SELECT * FROM employees;
 SELECT * FROM departments;
