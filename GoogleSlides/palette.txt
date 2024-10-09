@@ -1,1 +1,8 @@
 https://coolors.co/ae7271-1d3c9b-4b4897-4d3466-386db5
+
+
+
+
+<!-- Coolors Palette Widget -->
+      <script src="https://coolors.co/palette-widget/widget.js"></script>
+      <script data-id="0502246097446416">new CoolorsPaletteWidget("0502246097446416", ["AE7271","1D3C9B","4B4897","4D3466","386DB5"]); </script>
