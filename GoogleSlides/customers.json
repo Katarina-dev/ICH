@@ -1,0 +1,38 @@
+[
+    {
+        "first_name": "Ivan",
+        "last_name": "Smith",
+        "birth_date": "1990-05-10",
+        "iban": "RU12345678901234567890"
+    },
+    {
+        "first_name": "Elena",
+        "last_name": "Petrova",
+        "birth_date": "2010-01-20",
+        "iban": "FR1420041010050500013M02606"
+    },
+    {
+        "first_name": "Anna",
+        "last_name": "Sidorova",
+        "birth_date": "1985-12-01",
+        "iban": "DE89370400440532013000"
+    },
+    {
+        "first_name": "Dmitry",
+        "last_name": "Simson",
+        "birth_date": "2025-07-05",
+        "iban": "GB82WEST12345698765432"
+    },
+    {
+        "first_name": "Olga",
+        "last_name": "Ivanova",
+        "birth_date": "1992-08-12",
+        "iban": "ES9121000418450200051332"
+    },
+    {
+        "first_name": "Maxim",
+        "last_name": "Petrov",
+        "birth_date": "1998-04-22",
+        "iban": "123"
+    }
+]
