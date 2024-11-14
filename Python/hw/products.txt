@@ -1,0 +1,4 @@
+Apple, 1.50, 10
+Banana, 0.75, 15
+Bread, 1, 2
+Meat, 6.5, 3
