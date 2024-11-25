@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS Taxi_ekmi;
+
+
 CREATE DATABASE IF NOT EXISTS Taxi_ekmi;
 
 
@@ -58,6 +61,9 @@ CREATE TABLE IF NOT EXISTS Insurance (
     cost INT,
     number INT
 );
+
+
+SHOW Auto;
 
 
 
