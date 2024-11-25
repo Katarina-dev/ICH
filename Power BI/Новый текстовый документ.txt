@@ -1,0 +1,28 @@
+В среднем Cristal_Sales на Order ID = 
+AVERAGEX(
+    KEEPFILTERS(VALUES('Orders'[Order ID])),
+    CALCULATE([Cristal_Sales])
+)
+Средний чек = [Cristal_Sales]/[OrdersCountUnique]
+Cristal_Sales = [SumSales] - [Sum_Return]
+
+
+
+прошлый месяц профит = CALCULATE([Profit], PREVIOUSMONTH('Календарь'[Date]))
+
+
+CONCATENATEX
+
+
+SumSales average per Order ID = 
+AVERAGEX(KEEPFILTERS(VALUES('Orders'[Order ID])), CALCULATE([SumSales]))
+
+
+
+AVG_ShipCost = DIVIDE(CALCULATE(SUM(Orders[Shipping Cost]), ISBLANK(Orders[Returns])), CALCULATE(DISTINCTCOUNT(Orders[Order ID]), ISBLANK(Orders[Returns])))
+
+
+
+AVG_ShipCost = DIVIDE(CALCULATE(SUM(Orders[Shipping Cost]), ISBLANK(Orders[Returns])), CALCULATE(DISTINCTCOUNT(Orders[Order ID]), ISBLANK(Orders[Returns])))
+
+GrSales = DIVIDE(([JUST_Sales] - [LastYearSales]), [LastYearSales])
