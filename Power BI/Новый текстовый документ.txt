@@ -26,3 +26,9 @@ AVG_ShipCost = DIVIDE(CALCULATE(SUM(Orders[Shipping Cost]), ISBLANK(Orders[Retur
 AVG_ShipCost = DIVIDE(CALCULATE(SUM(Orders[Shipping Cost]), ISBLANK(Orders[Returns])), CALCULATE(DISTINCTCOUNT(Orders[Order ID]), ISBLANK(Orders[Returns])))
 
 GrSales = DIVIDE(([JUST_Sales] - [LastYearSales]), [LastYearSales])
+
+
+= #table ({"Name", "ID"} , {{"Profit", 1} , {"Sales", 2 }, {"Orders", 3}})   - формула массива для создания таблицы в power query, вставляется в строке формул в пустом запросе.
+
+
+For_graphic = SWITCH(TRUE(), SELECTEDVALUE('Table_for_slice'[ID])= 1, [SumProfit], SELECTEDVALUE('Table_for_slice'[ID]) = 2, [JUST_Sales], SELECTEDVALUE('Table_for_slice'[ID]) = 3, [CountUniqueOrders], [SumProfit]) - для меры переключения графиков
