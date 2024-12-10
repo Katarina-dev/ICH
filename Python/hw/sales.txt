@@ -1,0 +1,5 @@
+product|quantity|price
+Laptop|5|1200
+Mouse|10|20
+Keyboard|7|50
+Laptop|2|1200

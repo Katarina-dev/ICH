@@ -1,0 +1,36 @@
+sales.txt
+product|quantity|price
+Laptop|5|1200
+Mouse|10|20
+Keyboard|7|50
+Laptop|2|1200
+sales.json
+[
+ {"product": "Laptop", "quantity": 3, "price": 1200},
+ {"product": "Monitor", "quantity": 4, "price": 300}, 
+ {"product": "Mouse", "quantity": 6, "price": 20} 
+]
+
+Teacher01 Teacher01  кому  Все 13:04
+Вам необходимо реализовать класс для работы с текстовыми файлами, содержащими данные о продажах.
+
+Создайте абстрактный класс DataSource, который содержит:
+Метод load_data() для загрузки данных (пока оставьте пустым).
+Метод process_data() для обработки данных (оставьте пустым).
+Метод analyze(), который вызывает load_data() и возвращает результат process_data().
+
+
+Создайте класс-наследник TextFileDataSource для работы с текстовыми файлами.
+
+Реализуйте метод load_data() так, чтобы он считывал данные из текстового файла.
+Данные в файле записаны в виде строк с разделителем |.
+Реализуйте метод process_data(), который возвращает считанные данные в виде списка словарей.
+from abc import ABC, abstractmethod
+
+
+
+
+class Animal(ABC):
+    @abstractmethod
+    def say(self):
+        pass
