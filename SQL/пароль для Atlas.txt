@@ -1,0 +1,5 @@
+katarina
+Z4ax1i0FbC0Ho0Im
+
+
+mongodb+srv://katarina:Z4ax1i0FbC0Ho0Im@cluster0.5gr77.mongodb.net/
