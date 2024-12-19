@@ -38,3 +38,6 @@ from (
 select co.Name, count(ci.name) as amount_of_cities from city as ci
 inner join country as co on ci.CountryCode = co.Code
 group by co.Name) as t;
+
+
+SELECT * FROM users
