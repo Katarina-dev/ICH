@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class MySQLDatabase:
-    def __init__(self, host='localhost', port=3306, user='root', password='123', db='sakila'):
+class ConnectionDB:
+    def __init__(self, host=None,  user=None, password=None, db=None, cursorclass=None):
         self.connection = None
         try:
             dbconfig = {
                             'host': os.getenv('DB_HOST'),
-                            'port': os.getenv('DB_PORT'),
+                            'port': int(os.getenv('DB_PORT')),
                             'user': os.getenv('DB_USER'),
                             'password': os.getenv('DB_PASSWORD'),
                             'db': os.getenv('DB_NAME'),
@@ -39,15 +39,15 @@ class MySQLDatabase:
 
     def mysql_request_create(self, sql):
         """Выполняет CREATE-запрос (или другой запрос, требующий commit)."""
-        return self.execute_query(sql, commit=True)
+        return self._execute_query(sql, commit=True)
 
     def mysql_request_update(self, sql, data):
         """Выполняет UPDATE-запрос с передачей данных."""
-        return self.execute_query(sql, data, commit=True)
+        return self._execute_query(sql, data, commit=True)
 
     def mysql_request_select(self, sql, params=None):
         """Выполняет SELECT-запрос и возвращает результат."""
-        return self.execute_query(sql, params)
+        return self._execute_query(sql, params)
 
     def close_connection(self):
         """Закрывает соединение"""
@@ -55,7 +55,7 @@ class MySQLDatabase:
             self.connection.close()
             print("Connection closed")
 
-    # Использование
+
+db = ConnectionDB()
 
 
-db = MySQLDatabase()
