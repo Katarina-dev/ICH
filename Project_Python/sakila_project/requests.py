@@ -2,30 +2,32 @@ import pymysql
 from db_connect import db
 from user_input import get_user_title
 
-def create_table_genre_year():
-        request_create_genre_year = ("CREATE TABLE IF NOT EXISTS `queries_genre_year` (id int AUTO_INCREMENT PRIMARY KEY, "
-                          "category VARCHAR(32), "
+def create_table_user_requests():
+        user_queries = ("CREATE TABLE IF NOT EXISTS `user_queries` (id int AUTO_INCREMENT PRIMARY KEY, "
+                          "title VARCHAR(100)"  
+                          "genre VARCHAR(32), "
                           "year YEAR, "
-                          "name VARCHAR(100), "
+                          "actor_last_name VARCHAR(50), "
                           "request_count INT DEFAULT 1, "
-                          "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP);")
-        db.mysql_request_create(request_create_genre_year)
-        return f'Table queries_genre_year was created successfully'
+                          "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,"
+                          "UNIQUE KEY user_request (title, genre, year, actor_last_name);")
+        db.mysql_request_create(user_queries)
+        return f'Table user_queries was created successfully'
 
-def create_table_keywords():
-        request_create_keywords = ("CREATE TABLE IF NOT EXISTS `queries_keywords` (id int AUTO_INCREMENT PRIMARY KEY, "
-                          "keyword VARCHAR(100), "
-                          "request_count INT DEFAULT 1, "
-                          "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP);")
-        db.mysql_request_create(request_create_keywords)
-        return f'Table queries_keywords was created successfully'
+# def create_table_keywords():
+#         request_create_keywords = ("CREATE TABLE IF NOT EXISTS `queries_keywords` (id int AUTO_INCREMENT PRIMARY KEY, "
+#                           "keyword VARCHAR(100), "
+#                           "request_count INT DEFAULT 1, "
+#                           "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP);")
+#         db.mysql_request_create(request_create_keywords)
+#         return f'Table queries_keywords was created successfully'
 
-create_table_genre_year()
-create_table_keywords()
+# create_table_genre_year()
 
 def get_all_movies():
     try:
-        request_all_movies = f'''select f.film_id, f.title, f.release_year, f.description,  GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors
+        request_all_movies = f'''select f.film_id, f.title, f.release_year, f.description,  
+        GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, f.rental_rate
         from category c 
         join film_category fc 
         on c.category_id = fc.category_id 
@@ -77,10 +79,10 @@ def search_by_genres():
         on f.film_id = fa.film_id 
         join actor a 
         on fa.actor_id  = a.actor_id 
-        where c.category_id = %s
+        where c.name = %s
         GROUP BY f.film_id
         '''
-        return db.mysql_request_select(request_genre)
+        return db.mysql_request_select(request_genre, params=[f"%{name}%"])
     except pymysql.Error as er:
         print(f'Database error: {er.errno} : {er.msg}')
 
@@ -104,9 +106,9 @@ def search_by_year(year):
     except pymysql.Error as er:
         print(f'Database error: {er.errno} : {er.msg}')
 
-def search_by_actor():
+def search_by_actor(actor_last_name):
     try:
-        request_genre = f'''select f.title, f.release_year, f.description,  GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors
+        request_actor = f'''select f.title, f.release_year, f.description,  GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors
         from category c 
         join film_category fc 
         on c.category_id = fc.category_id 
@@ -116,10 +118,17 @@ def search_by_actor():
         on f.film_id = fa.film_id 
         join actor a 
         on fa.actor_id  = a.actor_id 
-        where c.category_id = %s
+        where a.last_name = %s
         GROUP BY f.film_id
         '''
-        return db.mysql_request_select(request_genre)
+        return db.mysql_request_select(request_actor, params=[f"%{actor_last_name}%"])
+    except pymysql.Error as er:
+        print(f'Database error: {er.errno} : {er.msg}')
+
+def get_popular_user_requests():
+    try:
+        request_popular = f'select * from `user_queries` order by desc limit 10'
+        return db.mysql_request_select(request_popular)
     except pymysql.Error as er:
         print(f'Database error: {er.errno} : {er.msg}')
 
@@ -140,14 +149,16 @@ def search_by_actor():
 #     return genre, year, name
 #
 #
-# def update_query_table(genre, year, name):
-#     # data = genre, year, name
-#     request_update = "INSERT INTO `queries_genre_year` (category, year, name) VALUES (%s, %s, %s)"
-#     db.mysql_request_update(request_update, (genre, year, name))
-#     return f'Table was updated successfully'
-#
-# genre, year, name = get_user_genre_year()
-# update_query_table(genre, year, name)
+def update_query_table(title, genre, year, actor_last_name):
+    # data = genre, year, name
+    request_update = f'''INSERT INTO `queries_genre_year` (title, genre_name, year, actor_last_name) 
+                    VALUES (%s, %s, %s, %s, 1) 
+                    ON DUPLICATE KEY UPDATE request_count = request_count + 1'''
+    db.mysql_request_update(request_update, (title, genre, year, actor_last_name))
+    return f'Table was updated successfully'
+
+genre, year, name = get_user_genre_year()
+update_query_table(genre, year, name)
 #
 #
 # def get_user_title():
