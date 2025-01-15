@@ -1,46 +1,3 @@
-# from tabulate import tabulate
-# from requests import get_movies_by_page
-# from db_connect import db
-# import pymysql
-#
-# # def print_all_movies():
-# #     res = requests.get_all_movies()
-# #     if res:
-# #         print("\n List of movies:")
-# #         print(tabulate(res, headers="keys", tablefmt="fancy_grid"))
-# #     else:
-# #         print("Error at getting movies.")
-#
-#
-# def print_all_movies():
-#     """Выводит фильмы с постраничным вводом в виде таблицы."""
-#     page = 1  # Номер текущей страницы
-#     while True:
-#         movies = get_movies_by_page(page)  # Получаем 10 фильмов
-#
-#         if not movies:
-#             print("\nNo more movies found.")  # Если фильмов нет — завершаем
-#             break
-#
-#         print(f"\nPage {page}:")
-#         print("*" * 40)
-#
-#         # Формируем список для tabulate
-#         table_data = [[movie['film_id'], movie['title'], movie['release_year']] for movie in movies]
-#
-#         # Выводим таблицу
-#         print(tabulate(table_data, headers=["ID", "Title", "Year"], tablefmt="grid"))
-#
-#         print("#" * 40)
-#
-#         next_page = input("Press Enter to view next page or type 'q' to quit: ")  # Ждем команду
-#         if next_page.lower() == 'q':  # Если введено 'q' — выходим
-#             break
-#         page += 1
-#
-# get_movies_by_page(1)
-# print_all_movies()
-
 import pymysql
 from tabulate import tabulate
 from db_connect import db
@@ -81,9 +38,9 @@ class MovieByPages:
             headers = list(result_table[0].keys())
 
             # Выводим таблицу
-            print(f"\nPage {self.page}:\n{'#' * 40}")
+            print(f"\nPage {self.page}:\n{'*' * 40}")
             print(tabulate(table_data, headers=headers, tablefmt="grid"))
-            print("#" * 40)
+            print("*" * 40)
 
             # Запрос на переход к следующей странице
             if input("Press Enter to view next page or type 'q' to quit: ").lower() == 'q':

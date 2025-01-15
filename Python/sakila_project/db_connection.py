@@ -1,5 +1,5 @@
 import pymysql.cursors
-import mysql.connector
+
 
 
 def mysql_request_create(sql):

@@ -3,14 +3,14 @@ from db_connect import db
 
 
 def create_table_user_requests():
-    user_queries = ("CREATE TABLE IF NOT EXISTS `user_queries` (id int AUTO_INCREMENT PRIMARY KEY, "
-                    "title VARCHAR(100)"
-                    "genre VARCHAR(32), "
-                    "year YEAR, "
-                    "actor_last_name VARCHAR(50), "
-                    "request_count INT DEFAULT 1, "
-                    "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,"
-                    "UNIQUE KEY user_request (title, genre, year, actor_last_name);")
+    user_queries = ('''CREATE TABLE IF NOT EXISTS `user_queries` (id int AUTO_INCREMENT PRIMARY KEY, 
+                    title VARCHAR(100),
+                    genre VARCHAR(32),
+                    year YEAR, 
+                    actor_last_name VARCHAR(50), 
+                    request_count INT DEFAULT 1,
+                    date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    UNIQUE KEY user_request (title, genre, year, actor_last_name);''')
     db.mysql_request_create(user_queries)
     return f'Table user_queries was created successfully'
 
@@ -28,44 +28,52 @@ def get_filters_values(title=None, genre=None, year=None, actor=None):
         user_values.append(f"%{genre}%")
     if year:
         filters.append("f.release_year = %s")
-        user_values.append(year)
+        user_values.append(f"{year}")
     if actor:
         filters.append("a.last_name LIKE %s")
         user_values.append(f"%{actor}%")
 
     # Если нет фильтров, просто получаем все фильмы
     if not filters:
-        query = "SELECT * FROM film LIMIT 20"
-        return db.mysql_request_select(query)
+        return None, []
+
     condition = " AND ".join(filters)
-    return user_values, condition
+    return condition, user_values
 
 def get_movies_by_criteria(user_values, condition):
-    request_search_movie = f'''SELECT f.film_id, f.title, f.release_year, f.description,  
-        GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, 
-        f.rental_rate, f.rating,
-        CASE
-        WHEN f.rating = 'G' THEN 'All age categories'
-        WHEN f.rating = 'PG' THEN 'Parental supervision is recommended'
-        WHEN f.rating = 'PG-13' THEN 'For children under 13 years old'
-        WHEN f.rating = 'R' THEN 'Restricted, requires adult accompaniment'
-        WHEN f.rating = 'NC-17' THEN 'Only for viewers from 18 years old'
-        ELSE 'No rating'
-    END AS rating_description
-	FROM category c 
-        join film_category fc 
-        on c.category_id = fc.category_id 
-        join film f 
-        on fc.film_id = f.film_id
-        join film_actor fa 
-        on f.film_id = fa.film_id 
-        join actor a 
-        on fa.actor_id  = a.actor_id 
-        WHERE {condition} 
-        GROUP BY f.film_id
-        ORDER BY f.rental_rate DESC
-        '''
-    return db.mysql_request_select(request_search_movie, user_values)
+    if condition:
+        request_movies = '''SELECT f.film_id, f.title, f.release_year, f.description,  
+            GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, 
+            f.rental_rate, f.rating,
+            CASE
+            WHEN f.rating = 'G' THEN 'All age categories'
+            WHEN f.rating = 'PG' THEN 'Parental supervision is recommended'
+            WHEN f.rating = 'PG-13' THEN 'For children under 13 years old'
+            WHEN f.rating = 'R' THEN 'Restricted, requires adult accompaniment'
+            WHEN f.rating = 'NC-17' THEN 'Only for viewers from 18 years old'
+            ELSE 'No rating'
+        END AS rating_description
+        FROM category c 
+            join film_category fc 
+            on c.category_id = fc.category_id 
+            join film f 
+            on fc.film_id = f.film_id
+            join film_actor fa 
+            on f.film_id = fa.film_id 
+            join actor a 
+            on fa.actor_id  = a.actor_id '''
+
+        request_movies += f" WHERE {condition}"
+
+    request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
+
+    try:
+        return db.mysql_request_select(request_movies, user_values)
+    except Exception as e:
+        print(f"Error executing query: {e}")
+        return None
+
+    # return db.mysql_request_select(request_movies, user_values)
 
 
 def transform_user_request(title=None, genre=None, year=None, actor_last_name=None):
@@ -86,6 +94,7 @@ def transform_user_request(title=None, genre=None, year=None, actor_last_name=No
     value_query = ", ".join(["%s"] * len(user_search))
     data_query = list(user_search.values())
     return key_query, value_query, data_query
+
 
 def update_query_table(key_query, value_query, data_query):
     try:

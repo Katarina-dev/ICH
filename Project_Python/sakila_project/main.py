@@ -1,5 +1,11 @@
-import db_connect
-import requests
+import pymysql
+from tabulate import tabulate
+
+from Project_Python.sakila_project.sql_requests import movies
+from db_connect import db
+from sql_requests import get_filters_values, get_movies_by_criteria, get_popular_user_requests
+from print_tables import MovieByPages
+from user_input import get_user_title, get_user_genre, get_user_year, get_user_actor
 
 def main():
     print("Welcome to program for working with Database \"MOVIES\"!\n"
@@ -10,37 +16,72 @@ def main():
           "4. Exit"
           )
 
+    def search_movies():
+        """Функция поиска фильма по критериям (с использованием user_input)"""
+        title = get_user_title().strip() or None
+        genre = get_user_genre().strip() or None
+        year = get_user_year().strip() or None
+        actor = get_user_actor().strip() or None
+
+        condition_filter, values_filter = get_filters_values(title, genre, year, actor)
+
+        if condition_filter is None:
+            print("No search criteria provided.")
+            return
+
+        movies = get_movies_by_criteria(values_filter, condition_filter)# Получаем фильмы по фильтрам
+
+        # Создаем объект пагинации для результатов
+        pages = MovieByPages(request="", params=[], page_size=10)
+        pages.page = 1
+        pages.request = movies
+        pages.params = values_filter
+        pages.print_results()
+
     while True:
         user_option = ("\nInput your option:").strip()
-        if user_option.isdigit():
-            print_all_movies(int(category_id))
-        else:
-            print("Error: Input correct category ID!")
 
+        if not user_option.isdigit():
+            print("Invalid input. Please enter a number (1-4).")
+            continue
 
+        user_option = int(user_option)
 
-          "2. Search movie by category\n"
-          "3. Search movie by genre\n"
-          "4. Search movie by year\n"
-          "5. Search for a movie by actor\n"
-          "6. Search for a movie using several criteria\n"
+        if user_option == 1:
+            search_movies()
 
-          )
+        elif user_option == 2:
+            search_movies()
 
-    print_all_movies()
+        elif user_option == 3:
+            show_popular_queries()
 
-    while True:
-        category_id = input("\nInput category ID (or 'exit' for finish work): ").strip()
-        if category_id.lower() == 'exit':
+        elif user_option == 4:
+            print("Goodbye!")
             break
-        if category_id.isdigit():
-            print_filter(int(category_id))
+
         else:
-            print("Error: Input correct category ID!")
+            print("Invalid option. Please enter a number (1-4).")
 
-    title = get_user_title()  # Получаем название фильма от пользователя
-    results = get_query_title(title)  # Передаем в get_query_title
-    print(results)
+            if condition is None:
+                print("No filters provided. Showing default movies list.")
+                pages.print_results()
+                return
 
-if __name__ == '__main__':
-    main()
+            if not movies:
+                print("\nNo movies found matching your criteria.")
+                return
+
+        def show_popular_queries():
+            """Функция вывода популярных запросов"""
+            popular_queries = get_popular_user_requests()
+
+            if not popular_queries:
+                print("No popular queries found.")
+                return
+
+            print("\nTop 10 popular searches:")
+            print(tabulate(popular_queries, headers="keys", tablefmt="fancy_grid"))
+
+        if __name__ == "__main__":
+            main()
