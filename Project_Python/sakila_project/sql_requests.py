@@ -1,6 +1,19 @@
 import pymysql
 from db_connect import db
 
+
+def create_table_user_requests():
+    user_queries = ("CREATE TABLE IF NOT EXISTS `user_queries` (id int AUTO_INCREMENT PRIMARY KEY, "
+                    "title VARCHAR(100)"
+                    "genre VARCHAR(32), "
+                    "year YEAR, "
+                    "actor_last_name VARCHAR(50), "
+                    "request_count INT DEFAULT 1, "
+                    "date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,"
+                    "UNIQUE KEY user_request (title, genre, year, actor_last_name);")
+    db.mysql_request_create(user_queries)
+    return f'Table user_queries was created successfully'
+
 def get_filters_values(title=None, genre=None, year=None, actor=None):
     """Ищет фильмы по введённым пользователем критериям."""
 
@@ -28,9 +41,18 @@ def get_filters_values(title=None, genre=None, year=None, actor=None):
     return user_values, condition
 
 def get_movies_by_criteria(user_values, condition):
-    request_search_movie = f'''select f.film_id, f.title, f.release_year, f.description,  
-        GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, f.rental_rate
-        from category c 
+    request_search_movie = f'''SELECT f.film_id, f.title, f.release_year, f.description,  
+        GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, 
+        f.rental_rate, f.rating,
+        CASE
+        WHEN f.rating = 'G' THEN 'All age categories'
+        WHEN f.rating = 'PG' THEN 'Parental supervision is recommended'
+        WHEN f.rating = 'PG-13' THEN 'For children under 13 years old'
+        WHEN f.rating = 'R' THEN 'Restricted, requires adult accompaniment'
+        WHEN f.rating = 'NC-17' THEN 'Only for viewers from 18 years old'
+        ELSE 'No rating'
+    END AS rating_description
+	FROM category c 
         join film_category fc 
         on c.category_id = fc.category_id 
         join film f 
@@ -38,16 +60,12 @@ def get_movies_by_criteria(user_values, condition):
         join film_actor fa 
         on f.film_id = fa.film_id 
         join actor a 
-        on fa.actor_id  = a.actor_id
+        on fa.actor_id  = a.actor_id 
         WHERE {condition} 
         GROUP BY f.film_id
         ORDER BY f.rental_rate DESC
         '''
-
-    query = f"SELECT * FROM film WHERE {condition} ORDER BY release_year DESC"
-
     return db.mysql_request_select(request_search_movie, user_values)
-
 
 
 def transform_user_request(title=None, genre=None, year=None, actor_last_name=None):
@@ -84,7 +102,7 @@ def update_query_table(key_query, value_query, data_query):
 
 def get_popular_user_requests():
     try:
-        request_popular = f'select * from `user_queries` order by request_count desc limit 10'
+        request_popular = f'SELECT * FROM `user_queries` ORDER BY request_count desc limit 10'
         return db.mysql_request_select(request_popular)
     except pymysql.Error as er:
         print(f'Database error: {er.errno} : {er.msg}')
