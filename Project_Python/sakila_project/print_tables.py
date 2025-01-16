@@ -1,7 +1,7 @@
 import pymysql
 from tabulate import tabulate
 
-from Project_Python.sakila_project.sql_requests import get_movies_by_criteria, user_values
+from Project_Python.sakila_project.sql_requests import get_movies_by_criteria
 from db_connect import db
 
 class MovieByPages:
@@ -36,11 +36,14 @@ class MovieByPages:
                 break
 
             # Преобразуем результат в формат для вывода
-            table_data = [list(row.values()) for row in result_table]
+            table_data = [[str(cell) if cell is not None else '' for cell in row.values()] for row in result_table]
             headers = list(result_table[0].keys())
 
+            # table_data = [list(row.values()) for row in result_table]
+            # headers = list(result_table[0].keys())
+
             # Выводим таблицу
-            print(f"\nPage {self.page}:\n{'*' * 40}")
+            print(f"\nPage {self.page}:\n{'*' * 70}")
             print(tabulate(table_data, headers=headers, tablefmt="grid",
                            maxcolwidths=[10, 30, 40, 40, 40, 40, 40, 40, 40, 40]))
             print("*" * 40)

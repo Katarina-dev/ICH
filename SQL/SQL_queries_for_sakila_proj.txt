@@ -1,0 +1,29 @@
+select * from queries_genre_year qgy ;
+select * from queries_keywords ;
+select * from film f;
+select * from actor a ;
+select * from category;
+select * from user_queries uq ;
+
+SELECT f.film_id, f.title, f.release_year, f.description,  
+        GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, 
+        f.rental_rate, f.rating,
+        CASE
+        WHEN f.rating = 'G' THEN 'All age categories'
+        WHEN f.rating = 'PG' THEN 'Parental supervision is recommended'
+        WHEN f.rating = 'PG-13' THEN 'For children under 13 years'
+        WHEN f.rating = 'R' THEN 'Restricted, requires adult accompaniment'
+        WHEN f.rating = 'NC-17' THEN 'Only for viewers over 17 years of age'
+        ELSE 'No rating'
+    END AS rating_description
+	FROM category c 
+        join film_category fc 
+        on c.category_id = fc.category_id 
+        join film f 
+        on fc.film_id = f.film_id
+        join film_actor fa 
+        on f.film_id = fa.film_id 
+        join actor a 
+        on fa.actor_id  = a.actor_id 
+        GROUP BY f.film_id
+        ORDER BY f.rental_rate DESC;

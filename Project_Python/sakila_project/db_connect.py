@@ -41,6 +41,10 @@ class ConnectionDB:
         """Выполняет CREATE-запрос (или другой запрос, требующий commit)."""
         return self._execute_query(sql, commit=True)
 
+    # def mysql_request_update(self, sql, data):
+    #     """Выполняет UPDATE-запрос с передачей данных."""
+    #     return self._execute_query(sql, data, commit=True)
+
     def mysql_request_update(self, sql, data):
         """Выполняет UPDATE-запрос с передачей данных."""
         return self._execute_query(sql, data, commit=True)

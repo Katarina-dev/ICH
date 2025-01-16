@@ -1,0 +1,25 @@
+Иконки должны быть:
+1. С заливкой
+2. В формате png
+3. Брать максимальный размер
+
+
+Палитра для дискретных значений - "ordered-sequential", "regular" 
+Упорядоченная последовательная - "ordered-sequential"
+
+Color palettes can be categorical (type="regular"), sequential (type="ordered-sequential"), or diverging (type="ordered-diverging").
+
+
+Для последовательных значений (графики, которые построены на значении например(SUM(Sales))):
+
+	<color-palette name="My new Sequential Palette" type="ordered-sequential">
+		<color>#ffffff</color> первый цвет всегда белый
+		<color>#3D405B</color>
+	</color-palette>
+
+
+
+<color-palette name="Diverging through Gray" type="ordered-diverging">
+		<color>#de003e</color> -  первый цвет
+		<color>#e0e1e8</color> - разделяющий цвет
+		<color>#285fd1</color> - последний цвет

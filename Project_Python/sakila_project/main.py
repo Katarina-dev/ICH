@@ -1,13 +1,15 @@
 import pymysql
 from tabulate import tabulate
 
-from Project_Python.sakila_project.sql_requests import movies, user_values
+from Project_Python.sakila_project.sql_requests import create_table_user_requests
+from Project_Python.sakila_project.sql_requests import update_query_table, transform_user_request
 from db_connect import db
 from sql_requests import get_filters_values, get_movies_by_criteria, get_popular_user_requests
 from print_tables import MovieByPages
 from user_input import get_user_title, get_user_genre, get_user_year, get_user_actor
 
 def main():
+    create_table_user_requests()
     print("Welcome to program for working with Database \"MOVIES\"!\n"
           "Please input the required option for further work:\n"
           "1. View a list of all movies\n"
@@ -30,41 +32,43 @@ def main():
         pages = MovieByPages(query, settings, page_size=10)
         pages.print_results()
 
-    # def get_all_movies():
-    #     """Функция вывода всех фильмов"""
-    #     # condition_filter, user_values = get_filters_values(title=None, genre=None, year=None, actor=None)
-    #     # movies = get_movies_by_criteria(user_values, condition_filter)
-    #     # all_movies = movies
-    #     # if not all_movies:
-    #     #     print("No movies found.")
-    #     #     return
-    #
-    #     # Создаем объект пагинации для результатов
-    #     pages = MovieByPages(request="", params=[], page_size=10)
-    #     pages.page = 1
-    #     # pages.request = all_movies
-    #     pages.print_results()
 
     def search_movies():
         """Функция поиска фильма по критериям (с использованием user_input)"""
         title = get_user_title().strip() or None
         genre = get_user_genre().strip() or None
-        year = get_user_year().strip() or None
-        actor = get_user_actor().strip() or None
+        release_year = get_user_year().strip() or None
+        actor_last_name = get_user_actor().strip() or None
 
-        condition_filter, values_filter = get_filters_values(title, genre, year, actor)
+
+
+        condition_filter, user_values = get_filters_values(title, genre, release_year, actor_last_name)  # Получаем пустые фильтры (все фильмы)
+        query, settings = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
+
+        '''key_query Содержит названия колонок, которые заполняет пользователь
+        value_query Содержит плейсхолдеры (%s) для вставки значений.
+        data_query Список значений, введённых пользователем.'''
+
+        key_query, value_query, data_query = transform_user_request(title, genre, release_year, actor_last_name)
+
+        # Записываем данные в таблицу user_queries
+        if key_query:
+            update_query_table(title=title, genre=genre, release_year=release_year, actor_last_name=actor_last_name)
+        else:
+            print("No search criteria provided. Query will not be saved.")
+
+        # condition_filter, values_filter = get_filters_values(title, genre, year, actor)
 
         if condition_filter is None:
             print("No search criteria provided.")
             return
 
-        movies = get_movies_by_criteria(values_filter, condition_filter)# Получаем фильмы по фильтрам
+        # movies = get_movies_by_criteria(values_filter, condition_filter)# Получаем фильмы по фильтрам
 
         # Создаем объект пагинации для результатов
-        pages = MovieByPages(request="", params=[], page_size=10)
+        pages = MovieByPages(query, settings, page_size=10)
         pages.page = 1
-        pages.request = movies
-        pages.params = values_filter
+        pages.params = settings
         pages.print_results()
 
     def show_popular_queries():
@@ -75,8 +79,7 @@ def main():
             return
 
         # Create an instance of MovieByPages and call print_results
-        pages = MovieByPages(request="", params=[], page_size=10)
-        pages.request = popular_queries
+        pages = MovieByPages(popular_queries, page_size=10)
         pages.print_results()
 
     while True:
