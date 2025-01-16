@@ -20,6 +20,7 @@ def get_filters_values(title=None, genre=None, year=None, actor=None):
     filters = []
     user_values = []
 
+
     if title:
         filters.append("f.title LIKE %s")
         user_values.append(f"%{title}%")  # Поиск по подстроке
@@ -37,12 +38,12 @@ def get_filters_values(title=None, genre=None, year=None, actor=None):
     if not filters:
         return None, []
 
-    condition = " AND ".join(filters)
-    return condition, user_values
+    condition_query = " AND ".join(filters)
+    return condition_query, user_values
 
-def get_movies_by_criteria(user_values, condition):
-    if condition:
-        request_movies = '''SELECT f.film_id, f.title, f.release_year, f.description,  
+def get_movies_by_criteria(user_values, condition_query):
+
+    request_movies = '''SELECT f.film_id, f.title, f.release_year, f.description,  
             GROUP_CONCAT(CONCAT(a.first_name, ' ', a.last_name) SEPARATOR ', ') AS actors, 
             f.rental_rate, f.rating,
             CASE
@@ -63,16 +64,17 @@ def get_movies_by_criteria(user_values, condition):
             join actor a 
             on fa.actor_id  = a.actor_id '''
 
-        request_movies += f" WHERE {condition}"
-
-    request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
-
+    if condition_query:
+        request_movies += f" WHERE {condition_query}"
+        request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
+    else:
+        request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
     try:
-        return db.mysql_request_select(request_movies, user_values)
+        # return db.mysql_request_select(request_movies, user_values)
+        return request_movies, user_values
     except Exception as e:
         print(f"Error executing query: {e}")
         return None
-
     # return db.mysql_request_select(request_movies, user_values)
 
 
@@ -117,5 +119,5 @@ def get_popular_user_requests():
         print(f'Database error: {er.errno} : {er.msg}')
 
 
-condition, values = get_filters_values(title="Inception", genre="Action", year=2010, actor="Nolan")
-movies = get_movies_by_criteria(condition, values)
+condition, user_values = get_filters_values(title="Inception", genre="Action", year=2010, actor="Nolan")
+movies = get_movies_by_criteria(user_values, condition )

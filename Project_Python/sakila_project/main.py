@@ -1,7 +1,7 @@
 import pymysql
 from tabulate import tabulate
 
-from Project_Python.sakila_project.sql_requests import movies
+from Project_Python.sakila_project.sql_requests import movies, user_values
 from db_connect import db
 from sql_requests import get_filters_values, get_movies_by_criteria, get_popular_user_requests
 from print_tables import MovieByPages
@@ -15,6 +15,35 @@ def main():
           "3. Popular queries\n"
           "4. Exit"
           )
+
+    def get_all_movies():
+        """Функция вывода всех фильмов"""
+        condition_filter, user_values = get_filters_values()  # Получаем пустые фильтры (все фильмы)
+        query, settings = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
+        # all_movies_query = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
+
+        if not query:
+            print("No movies found.")
+            return
+
+        # Создаем объект пагинации с корректным SQL-запросом
+        pages = MovieByPages(query, settings, page_size=10)
+        pages.print_results()
+
+    # def get_all_movies():
+    #     """Функция вывода всех фильмов"""
+    #     # condition_filter, user_values = get_filters_values(title=None, genre=None, year=None, actor=None)
+    #     # movies = get_movies_by_criteria(user_values, condition_filter)
+    #     # all_movies = movies
+    #     # if not all_movies:
+    #     #     print("No movies found.")
+    #     #     return
+    #
+    #     # Создаем объект пагинации для результатов
+    #     pages = MovieByPages(request="", params=[], page_size=10)
+    #     pages.page = 1
+    #     # pages.request = all_movies
+    #     pages.print_results()
 
     def search_movies():
         """Функция поиска фильма по критериям (с использованием user_input)"""
@@ -38,8 +67,20 @@ def main():
         pages.params = values_filter
         pages.print_results()
 
+    def show_popular_queries():
+        popular_queries = get_popular_user_requests()
+
+        if not popular_queries:
+            print("No popular queries found.")
+            return
+
+        # Create an instance of MovieByPages and call print_results
+        pages = MovieByPages(request="", params=[], page_size=10)
+        pages.request = popular_queries
+        pages.print_results()
+
     while True:
-        user_option = ("\nInput your option:").strip()
+        user_option = input("\nInput your option:").strip()
 
         if not user_option.isdigit():
             print("Invalid input. Please enter a number (1-4).")
@@ -48,7 +89,7 @@ def main():
         user_option = int(user_option)
 
         if user_option == 1:
-            search_movies()
+            get_all_movies()
 
         elif user_option == 2:
             search_movies()
@@ -63,25 +104,25 @@ def main():
         else:
             print("Invalid option. Please enter a number (1-4).")
 
-            if condition is None:
-                print("No filters provided. Showing default movies list.")
-                pages.print_results()
-                return
+        #     if condition_query is None:
+        #         print("No filters provided. Showing default movies list.")
+        #         pages.print_results()
+        #         return
+        #
+        #     if not movies:
+        #         print("\nNo movies found matching your criteria.")
+        #         return
+        #
+        # def show_popular_queries():
+        #     """Функция вывода популярных запросов"""
+        #     popular_queries = get_popular_user_requests()
+        #
+        #     if not popular_queries:
+        #         print("No popular queries found.")
+        #         return
+        #
+        #     print("\nTop 10 popular searches:")
+        #     print(tabulate(popular_queries, headers="keys", tablefmt="fancy_grid"))
 
-            if not movies:
-                print("\nNo movies found matching your criteria.")
-                return
-
-        def show_popular_queries():
-            """Функция вывода популярных запросов"""
-            popular_queries = get_popular_user_requests()
-
-            if not popular_queries:
-                print("No popular queries found.")
-                return
-
-            print("\nTop 10 popular searches:")
-            print(tabulate(popular_queries, headers="keys", tablefmt="fancy_grid"))
-
-        if __name__ == "__main__":
-            main()
+if __name__ == "__main__":
+    main()

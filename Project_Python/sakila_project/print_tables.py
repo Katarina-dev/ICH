@@ -1,9 +1,11 @@
 import pymysql
 from tabulate import tabulate
+
+from Project_Python.sakila_project.sql_requests import get_movies_by_criteria, user_values
 from db_connect import db
 
 class MovieByPages:
-    def __init__(self, request, params=None, page_size=10):
+    def __init__(self, request, params=None, page_size=10, condition_filter=None):
         """Инициализация с базовыми параметрами для пагинации"""
         self.request = request  # SQL-запрос
         self.params = params or []  # Параметры запроса
@@ -13,7 +15,7 @@ class MovieByPages:
     def get_data_by_pages(self):
         """Возвращает данные с пагинацией (LIMIT и OFFSET)"""
         offset = (self.page - 1) * self.page_size  # Смещение для пагинации
-        page_request = self.request + " LIMIT %s OFFSET %s"  # Добавляем LIMIT и OFFSET
+        page_request = self.request + " LIMIT %s OFFSET %s" # Добавляем LIMIT и OFFSET
 
         # Добавляем параметры запроса и параметры пагинации
         request_params = self.params + [self.page_size, offset]
@@ -39,7 +41,8 @@ class MovieByPages:
 
             # Выводим таблицу
             print(f"\nPage {self.page}:\n{'*' * 40}")
-            print(tabulate(table_data, headers=headers, tablefmt="grid"))
+            print(tabulate(table_data, headers=headers, tablefmt="grid",
+                           maxcolwidths=[10, 30, 40, 40, 40, 40, 40, 40, 40, 40]))
             print("*" * 40)
 
             # Запрос на переход к следующей странице
