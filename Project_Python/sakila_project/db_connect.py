@@ -5,7 +5,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class ConnectionDB:
+    """Class for working with MySQL database."""
     def __init__(self, host=None,  user=None, password=None, db=None, cursorclass=None):
+        """Initialize the connection to the database."""
         self.connection = None
         try:
             dbconfig = {
@@ -24,13 +26,13 @@ class ConnectionDB:
             print(ex)
 
     def _execute_query(self, sql, params=None, commit=False):
-        """Выполняет SQL-запрос и возвращает результат (если есть)."""
+        """Execute SQL query and return the result (if any)."""
         try:
             with self.connection.cursor() as cursor:
                 cursor.execute(sql, params)
                 if commit:
                     self.connection.commit()
-                result = cursor.fetchall()  # Сохраняем результат перед выходом из `with`
+                result = cursor.fetchall()  # Save results before exit from 'with' block
             return result
         except Exception as ex:
             print("Query execution failed")
@@ -38,23 +40,19 @@ class ConnectionDB:
             return None
 
     def mysql_request_create(self, sql):
-        """Выполняет CREATE-запрос (или другой запрос, требующий commit)."""
+        """Execute CREATE TABLE query."""
         return self._execute_query(sql, commit=True)
 
-    # def mysql_request_update(self, sql, data):
-    #     """Выполняет UPDATE-запрос с передачей данных."""
-    #     return self._execute_query(sql, data, commit=True)
-
     def mysql_request_update(self, sql, data):
-        """Выполняет UPDATE-запрос с передачей данных."""
+        """Execute INSERT query."""
         return self._execute_query(sql, data, commit=True)
 
     def mysql_request_select(self, sql, params=None):
-        """Выполняет SELECT-запрос и возвращает результат."""
+        """Execute SELECT query."""
         return self._execute_query(sql, params)
 
     def close_connection(self):
-        """Закрывает соединение"""
+        """Close the connection to the database."""
         if self.connection:
             self.connection.close()
             print("Connection closed")

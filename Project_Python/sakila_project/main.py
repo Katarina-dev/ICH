@@ -1,9 +1,5 @@
-import pymysql
-from tabulate import tabulate
-
 from Project_Python.sakila_project.sql_requests import create_table_user_requests
 from Project_Python.sakila_project.sql_requests import update_query_table, transform_user_request
-from db_connect import db
 from sql_requests import get_filters_values, get_movies_by_criteria, get_popular_user_requests
 from print_tables import MovieByPages
 from user_input import get_user_title, get_user_genre, get_user_year, get_user_actor
@@ -20,9 +16,8 @@ def main():
 
     def get_all_movies():
         """Функция вывода всех фильмов"""
-        condition_filter, user_values = get_filters_values()  # Получаем пустые фильтры (все фильмы)
+        condition_filter, user_values = get_filters_values()  #Getting empty filters (all movies)
         query, settings = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
-        # all_movies_query = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
 
         if not query:
             print("No movies found.")

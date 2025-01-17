@@ -15,7 +15,7 @@ def create_table_user_requests():
     return f'Table user_queries was created successfully'
 
 def get_filters_values(title=None, genre=None, release_year=None, actor_last_name=None):
-    """Ищет фильмы по введённым пользователем критериям."""
+    """Searches for movies based on user input."""
 
     filters = []
     user_values = []
@@ -33,16 +33,14 @@ def get_filters_values(title=None, genre=None, release_year=None, actor_last_nam
     if actor_last_name:
         filters.append("a.last_name LIKE %s")
         user_values.append(f"%{actor_last_name}%")
-
-    # Если нет фильтров, просто получаем все фильмы
-    if not filters:
+    if not filters: # If there are no filters, we just get all the movies
         return None, []
 
     condition_query = " AND ".join(filters)
     return condition_query, user_values
 
 def get_movies_by_criteria(user_values, condition_query):
-
+    """Returns a SQL-query to search for movies based on get_filters_values."""
     request_movies = '''SELECT f.film_id, f.title, 
             GROUP_CONCAT(distinct c.name separator ', ') as genre,
             f.release_year, f.description,  
