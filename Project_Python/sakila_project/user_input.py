@@ -1,6 +1,4 @@
-import pymysql
-from db_connect import db
-
+# This file contains functions that get user input for the main.py file
 def get_user_title():
     title = input('Input film title:')
     return title

@@ -40,7 +40,8 @@ def get_filters_values(title=None, genre=None, release_year=None, actor_last_nam
     return condition_query, user_values
 
 def get_movies_by_criteria(user_values, condition_query):
-    """Returns a SQL-query to search for movies based on get_filters_values."""
+    '''Returns a query to search for movies based on user input.'''
+
     request_movies = '''SELECT f.film_id, f.title, 
             GROUP_CONCAT(distinct c.name separator ', ') as genre,
             f.release_year, f.description,  

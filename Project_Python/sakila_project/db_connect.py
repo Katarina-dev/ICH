@@ -1,16 +1,17 @@
 import pymysql
 import os
 from dotenv import load_dotenv
+from typing import Optional, Dict, Any, Union
 
 load_dotenv()
 
 class ConnectionDB:
     """Class for working with MySQL database."""
-    def __init__(self, host=None,  user=None, password=None, db=None, cursorclass=None):
-        """Initialize the connection to the database."""
-        self.connection = None
+    def __init__(self):
+        """Initialize the connection to the database using .env variables"""
+        self.connection = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
         try:
-            dbconfig = {
+            dbconfig: Dict[str, Any] = {
                             'host': os.getenv('DB_HOST'),
                             'port': int(os.getenv('DB_PORT')),
                             'user': os.getenv('DB_USER'),
@@ -25,7 +26,7 @@ class ConnectionDB:
             print("Connection refused")
             print(ex)
 
-    def _execute_query(self, sql, params=None, commit=False):
+    def _execute_query(self, sql: str, params: Optional[Union[Dict[str, Any], list]] = None, commit: bool = False) -> Optional[list]:
         """Execute SQL query and return the result (if any)."""
         try:
             with self.connection.cursor() as cursor:
@@ -45,7 +46,11 @@ class ConnectionDB:
 
     def mysql_request_update(self, sql, data):
         """Execute INSERT query."""
-        return self._execute_query(sql, data, commit=True)
+        try:
+            return self._execute_query(sql, data, commit=True)
+        except Exception as er:
+            print(f'Database error: {er.errno} : {er.msg}')
+            return "Database error occurred."
 
     def mysql_request_select(self, sql, params=None):
         """Execute SELECT query."""
@@ -54,10 +59,19 @@ class ConnectionDB:
     def close_connection(self):
         """Close the connection to the database."""
         if self.connection:
-            self.connection.close()
-            print("Connection closed")
+            try:
+                self.connection.close()
+                self.connection = None  #reset the connection to avoid closing it again
+                return f"Connection closed"
+            except Exception as ex:
+                return f'Connection refused. Error: {ex}'
+        return f'No active connection to close'
 
 
 db = ConnectionDB()
-
+# db.connection = None  # 1. Проверяем случай, когда соединение отсутствует
+# print(db.close_connection())  # Ожидаем: "No active connection to close"
+#
+# db.connection = type("FakeConnection", (), {"close": lambda: 1 / 0})()  # 2. Ошибка при закрытии
+# print(db.close_connection())  # Ожидаем: "Error while closing connection: division by zero"
 
