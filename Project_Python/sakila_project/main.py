@@ -32,7 +32,7 @@ def main():
         """Функция поиска фильма по критериям (с использованием user_input)"""
         title = get_user_title().strip() or None
         genre = get_user_genre().strip() or None
-        release_year = get_user_year().strip() or None
+        release_year = get_user_year() or None
         actor_last_name = get_user_actor().strip() or None
 
 
@@ -51,8 +51,6 @@ def main():
             update_query_table(title=title, genre=genre, release_year=release_year, actor_last_name=actor_last_name)
         else:
             print("No search criteria provided. Query will not be saved.")
-
-        # condition_filter, values_filter = get_filters_values(title, genre, year, actor)
 
         if condition_filter is None:
             print("No search criteria provided.")
