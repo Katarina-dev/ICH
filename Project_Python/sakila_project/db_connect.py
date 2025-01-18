@@ -1,3 +1,5 @@
+from multiprocessing.connection import Connection
+
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -9,7 +11,7 @@ class ConnectionDB:
     """Class for working with MySQL database."""
     def __init__(self):
         """Initialize the connection to the database using .env variables"""
-        self.connection = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
+        self.connection: Optional[Connection] = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
         try:
             dbconfig: Dict[str, Any] = {
                             'host': os.getenv('DB_HOST'),
@@ -19,7 +21,6 @@ class ConnectionDB:
                             'db': os.getenv('DB_NAME'),
                             'cursorclass': pymysql.cursors.DictCursor
             }
-
             self.connection = pymysql.connect(**dbconfig)
             print("Connection successfully established")
         except Exception as ex:
@@ -40,23 +41,23 @@ class ConnectionDB:
             print(ex)
             return None
 
-    def mysql_request_create(self, sql):
+    def mysql_request_create(self, sql: str) -> Optional[list]:
         """Execute CREATE TABLE query."""
         return self._execute_query(sql, commit=True)
 
-    def mysql_request_update(self, sql, data):
-        """Execute INSERT query."""
+    def mysql_request_update(self, sql: str, data: Optional[Union[Dict[str, Any], list]] = None) -> Optional[list]:
+        """Execute INSERT INTO query and rolls back the transaction if it fails."""
         try:
             return self._execute_query(sql, data, commit=True)
         except Exception as er:
             print(f'Database error: {er.errno} : {er.msg}')
-            return "Database error occurred."
+            self.connection.rollback()
 
-    def mysql_request_select(self, sql, params=None):
+    def mysql_request_select(self, sql:str, params:Optional[Union[Dict[str, Any], list]]=None) -> Optional[list]:
         """Execute SELECT query."""
         return self._execute_query(sql, params)
 
-    def close_connection(self):
+    def close_connection(self) -> str:
         """Close the connection to the database."""
         if self.connection:
             try:
