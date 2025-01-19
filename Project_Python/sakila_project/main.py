@@ -30,10 +30,10 @@ def main():
 
     def search_movies():
         """Функция поиска фильма по критериям (с использованием user_input)"""
-        title = get_user_title().strip() or None
-        genre = get_user_genre().strip() or None
+        title = get_user_title() or None
+        genre = get_user_genre() or None
         release_year = get_user_year() or None
-        actor_last_name = get_user_actor().strip() or None
+        actor_last_name = get_user_actor() or None
 
 
 
