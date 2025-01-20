@@ -1,8 +1,18 @@
 import pymysql
 from db_connect import db
+from typing import Optional, Tuple, List
 
 
-def create_table_user_requests():
+def create_table_user_requests() -> str:
+    """Creates a table 'user_queries' in the database if it does not exist.
+
+        This function sends a SQL query to the database to create a table that stores
+        user search queries. The table includes columns for the movie title, genre,
+        release year, actor's last name, the count of requests, and the timestamp of the request.
+
+        Returns:
+            str: A success message confirming that the table was created.
+        """
     user_queries = ('''CREATE TABLE IF NOT EXISTS `user_queries` (id int AUTO_INCREMENT PRIMARY KEY, 
                     title VARCHAR(100) DEFAULT '',
                     genre VARCHAR(32) DEFAULT '',
@@ -10,16 +20,29 @@ def create_table_user_requests():
                     actor_last_name VARCHAR(50) DEFAULT '', 
                     request_count INT DEFAULT 1,
                     date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    UNIQUE KEY idx_user_request (title, genre, release_year, actor_last_name));''')
+                    UNIQUE KEY idx_user_request (title, genre, release_year, actor_last_name));''') #A unique index is created for the combination of title, genre, release_year, actor_last_name columns. This ensures that there are no duplicate queries with the same parameters in the table and necessary for count user queries.
     db.mysql_request_create(user_queries)
     return f'Table user_queries was created successfully'
 
-def get_filters_values(title=None, genre=None, release_year=None, actor_last_name=None):
-    """Searches for movies based on user input."""
+def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, release_year: Optional[int]=None, actor_last_name:Optional[str]=None)-> Tuple[Optional[str], List[str]]:#If the user does not pass any of these parameters, they are automatically set to None.
+    """Searches for movies based on user input.
 
+    This function constructs SQL query conditions and corresponding values based on the provided
+    movie title, genre, release year, and actor's last name.
+
+    Args:
+        title (str, optional): The title of the movie. Defaults to None.
+        genre (str, optional): The genre of the movie. Defaults to None.
+        release_year (int, optional): The release year of the movie. Defaults to None.
+        actor_last_name (str, optional): The last name of the actor. Defaults to None.
+
+    Returns:
+        tuple: A tuple is formed in which two values are passed: condition_query is a
+        string with sql condition for substitution into the query and user_values
+        are the parameter values that will be substituted into the %s parameter
+    """
     filters = []
     user_values = []
-
 
     if title:
         filters.append("f.title LIKE %s")
@@ -39,9 +62,21 @@ def get_filters_values(title=None, genre=None, release_year=None, actor_last_nam
     condition_query = " AND ".join(filters)
     return condition_query, user_values
 
-def get_movies_by_criteria(user_values, condition_query):
-    '''Returns a query to search for movies based on user input.'''
+def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional[str]) -> Tuple[str, List[str]]:
+    """Returns a query to search for movies based on user input.
 
+    This function constructs an SQL query to search for movies based on the provided
+    condition query and user values. It includes details such as film ID, title, genre,
+    release year, description, actors, rental rate, rating, and rating description.
+
+    Args:
+        condition_query (Optional[str]): The SQL condition query string.
+        user_values (List[str]): The list of user values to be used in the query.
+
+    Returns:
+        Tuple[Optional[str], List[str]]: A tuple containing the constructed SQL query string
+        and the list of user values.
+    """
     request_movies = '''SELECT f.film_id, f.title, 
             GROUP_CONCAT(distinct c.name separator ', ') as genre,
             f.release_year, f.description,  
@@ -66,17 +101,13 @@ def get_movies_by_criteria(user_values, condition_query):
             on fa.actor_id  = a.actor_id '''
 
     if condition_query:
-        request_movies += f" WHERE {condition_query}"
-        request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
-    else:
-        request_movies += " GROUP BY f.film_id ORDER BY f.rental_rate DESC"
+        request_movies += f" WHERE {condition_query} "
+    request_movies += " GROUP BY f.film_id"
     try:
         return request_movies, user_values
     except Exception as e:
         print(f"Error executing query: {e}")
         return None
-    # return db.mysql_request_select(request_movies, user_values)
-
 
 def transform_user_request(title=None, genre=None, release_year=None, actor_last_name=None):
     """Добавляет новый запрос или увеличивает request_count, если такой уже есть."""
@@ -115,26 +146,12 @@ def update_query_table(title=None, genre=None, release_year=None, actor_last_nam
             VALUES ({value_query},%s)
             ON DUPLICATE KEY UPDATE request_count = request_count + 1;
             """
-
-
-
-        # Выполняем SQL-запрос
         db.mysql_request_update(request_update, data_query)  # Добавляем значение
 
         return "Request recorded or updated."
     except pymysql.Error as er:
         print(f'Database error: {er.errno} : {er.msg}')
         return "Database error occurred."
-    # try:
-    #     request_update = f"""
-    #     INSERT INTO user_queries ({title}, {genre}, {year}, {actor}, request_count)
-    #     VALUES (%s, %s, %s, %s, 1)
-    #     ON DUPLICATE KEY UPDATE request_count = request_count + 1;
-    # """
-    #     db.mysql_request_update(request_update)
-    #     return "Request recorded or updated."
-    # except pymysql.Error as er:
-    #     print(f'Database error: {er.errno} : {er.msg}')
 
 
 def get_popular_user_requests():

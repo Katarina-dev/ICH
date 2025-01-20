@@ -3,7 +3,14 @@ from typing import Optional
 
 
 def get_user_title() -> str:
-    """Input a title name from user and return it."""
+    """Input a title name from user and return it.
+
+    This function prompts the user for a movie title and performs validation checks.
+    The title must be a string of no more than 100 characters and must not contain any digits.
+
+    Returns:
+        str: The valid title entered by the user.
+    """
     while True:
         try:
             title = input('Input film title:').strip()
@@ -17,7 +24,14 @@ def get_user_title() -> str:
     return title
 
 def get_user_genre() -> str:
-    """Input a genre name from user and return it."""
+    """Input a genre name from user and return it.
+
+    This function prompts the user for a genre name and performs validation checks.
+    The genre name must be a string of no more than 32 characters and must not contain any digits.
+
+    Returns:
+        str: The valid genre name entered by the user.
+    """
     while True:
         try:
             genre = input('Input genre:').strip()
@@ -30,7 +44,15 @@ def get_user_genre() -> str:
                 print(f'Invalid name of genre. {e}')
 
 def get_user_year() -> Optional[int]:
-    """Input a release year from user and return it."""
+    """Input a release year from user and return it.
+
+        This function prompts the user for a film's release year and performs validation checks.
+        The year must be a number between 1901 and 2155. If the user does not input a year, None is returned.
+
+        Returns:
+            Optional[int]: The valid year entered by the user or None if the input is empty.
+    """
+
     while True:
         user_year = input('Input film release year:').strip()
         if user_year == '':
@@ -47,7 +69,14 @@ def get_user_year() -> Optional[int]:
                 print(f'Invalid input. Please enter a numeric year.')
 
 def get_user_actor() -> str:
-    """Input an actor last name from user and return it."""
+    """Input an actor's last name from user and return it.
+
+    This function prompts the user for an actor's last name and performs validation checks.
+    The actor's last name must be a string of no more than 50 characters and must not contain any digits.
+
+    Returns:
+        str: The valid actor's last name entered by the user.
+    """
     while True:
         try:
             actor_last_name = input('Input actor last name:').strip()

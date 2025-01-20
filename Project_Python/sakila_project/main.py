@@ -38,7 +38,7 @@ def main():
 
 
         condition_filter, user_values = get_filters_values(title, genre, release_year, actor_last_name)  # Получаем пустые фильтры (все фильмы)
-        query, settings = get_movies_by_criteria(user_values, condition_filter)  # Получаем запрос
+        query, settings = get_movies_by_criteria(condition_filter, user_values)  # Получаем запрос
 
         '''key_query Содержит названия колонок, которые заполняет пользователь
         value_query Содержит плейсхолдеры (%s) для вставки значений.
