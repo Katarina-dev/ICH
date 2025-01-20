@@ -122,22 +122,18 @@ def transform_user_request(title:Optional[str]=None, genre:Optional[str]=None, r
         Tuple[str, str, List[str | int]]:
             - `key_query`: A string containing the field names for the query, separated by commas.
             - `value_query`: String with placeholders (`%s`), corresponding"""
-
-    # Убираем пустые значения
     user_search = {
         "title": title,
         "genre": genre,
         "release_year": release_year,
         "actor_last_name": actor_last_name
     }
-    # user_search = {field: value for field, value in user_search.items() if value is not None}  # Removes None-values
+
     filtered_search = {}
     for field, value in user_search.items():
         if value is not None:
-            filtered_search[field] = value
+            filtered_search[field] = value# Removes None-values
 
-    # if not user_search:
-    #     print("No data provided.")
     if not filtered_search:
         print("No data provided.")
         return "", "", []
@@ -147,41 +143,76 @@ def transform_user_request(title:Optional[str]=None, genre:Optional[str]=None, r
     data_query = list(filtered_search.values())
     return key_query, value_query, data_query
 
+def build_insert_query(key_query: str, value_query: str) -> str:
+    """Forms an SQL query to insert or update a record in the `user_queries` table.
 
+    Args:
+        key_query (str): A string containing the names of the fields to insert.
+        value_query (str): A string with placeholders (%s) corresponding to the values.
 
-def update_query_table(title=None, genre=None, release_year=None, actor_last_name=None):
+    Returns:
+        str: Generated SQL query that can be executed to insert or update the record.
+
+    Example:
+        If key_query = "title, genre", value_query = "%s, %s", the resulting query will be:
+        "INSERT INTO user_queries (title, genre, request_count) VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE request_count = request_count + 1;"
+    """
+    return f"""
+        INSERT INTO user_queries ({key_query}, request_count)
+        VALUES ({value_query}, %s)
+        ON DUPLICATE KEY UPDATE request_count = request_count + 1;
+    """
+
+def update_query_table(title:Optional[str]=None, genre:Optional[str] = None, release_year: Optional[int] = None, actor_last_name:Optional[str] = None) -> Optional[str]:
+    """Handles the process of updating or inserting user query data into the database.
+
+        Args:
+            title (Optional[str]): Movie title.
+            genre (Optional[str]): Movie genre.
+            release_year (Optional[int]): Year the movie was released.
+            actor_last_name (Optional[str]): Actor's last name.
+
+        Returns:
+            Optional[str]: Result message indicating the outcome of the database operation,
+            or None if the operation was successful.
+        """
     try:
         # Используем transform_user_request для формирования запроса
         key_query, value_query, data_query = transform_user_request(title, genre, release_year, actor_last_name)
-
-        if not key_query:  # Если нет данных, выходим
-            print("No data provided for the query update.")
-            return
-
+        # Add value 1 to data_query for request_count
         data_query.append(1)
-
-        # Формируем SQL-запрос
-        request_update = f"""
-            INSERT INTO user_queries ({key_query}, request_count)
-            VALUES ({value_query},%s)
-            ON DUPLICATE KEY UPDATE request_count = request_count + 1;
-            """
-        db.mysql_request_update(request_update, data_query)  # Добавляем значение
-
-        return "Request recorded or updated."
+        # Create an SQL query using the build_insert_query function
+        request_update = build_insert_query(key_query, value_query)
+        # Via the data_query parameter, values are passed to the SQL query for placeholders
+        db.mysql_request_update(request_update, data_query)
     except pymysql.Error as er:
-        print(f'Database error: {er.errno} : {er.msg}')
-        return "Database error occurred."
+        # Handle database-specific errors
+        return f'Database error: {er.errno} : {er.msg}'
+    except Exception as e:
+        # Catch any other unexpected errors
+        return f"An unexpected error occurred: {e}"
 
 
-def get_popular_user_requests():
+def get_popular_user_requests() -> Optional[str]:
+    """Generates and executes an SQL query to retrieve the most popular user queries based on the request count.
+
+    This function constructs a SQL query to select all records from the `user_queries` table,
+    ordered by the `request_count` field in descending order, and executes it to retrieve the data.
+
+    Returns:
+        Optional[str]: The SQL query string to retrieve the most popular user requests.
+
+    Raises:
+        pymysql.Error: If there is an error with the database query, it raises a MySQL error.
+        Exception: If there is any other unexpected error.
+    """
     try:
         request_popular = f'SELECT * FROM `user_queries` ORDER BY request_count desc'
+        # Return a query string to pass to MovieByPages.print_results, which is called in the show_popular_queries() function of the main module
         return request_popular
-        # return db.mysql_request_select(request_popular)
     except pymysql.Error as er:
-        print(f'Database error: {er.errno} : {er.msg}')
+        return f'Database error at getting popular requests: {er.errno} : {er.msg}'
+    except Exception as e:
+        return f"An unexpected error occurred at getting popular requests: {e}"
 
-
-# condition, user_values = get_filters_values(title="Inception", genre="Action", year=2010, actor="Nolan")
-# movies = get_movies_by_criteria(user_values, condition )
