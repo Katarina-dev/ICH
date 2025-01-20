@@ -1,6 +1,6 @@
 import pymysql
 from db_connect import db
-from typing import Optional, Tuple, List, Union
+from typing import Optional, Tuple, List
 
 
 def create_table_user_requests() -> str:

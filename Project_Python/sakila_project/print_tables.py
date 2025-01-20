@@ -1,54 +1,70 @@
+from typing import Optional
+
 import pymysql
 from tabulate import tabulate
-
-from Project_Python.sakila_project.sql_requests import get_movies_by_criteria
 from db_connect import db
+from typing import Optional, Tuple, List
 
 class MovieByPages:
-    def __init__(self, request, params=None, page_size=10, condition_filter=None):
-        """Инициализация с базовыми параметрами для пагинации"""
-        self.request = request  # SQL-запрос
-        self.params = params or []  # Параметры запроса
-        self.page_size = page_size  # Размер страницы
-        self.page = 1  # Начальная страница
+    def __init__(self, request: str, params:Optional[list]=None, page_size: int = 10):
+        """Initialization with basic parameters for pagination.
 
-    def get_data_by_pages(self):
-        """Возвращает данные с пагинацией (LIMIT и OFFSET)"""
-        offset = (self.page - 1) * self.page_size  # Смещение для пагинации
-        page_request = self.request + " LIMIT %s OFFSET %s" # Добавляем LIMIT и OFFSET
+        Args:
+            request (str): Basic SQL query (without LIMIT and OFFSET).
+            params (Optional[list]): Parameters for the SQL query (default empty list).
+            page_size (int): Number of entries on one page (default 10).
+            """
+        self.request = request  # Saving the basic SQL query
+        self.params = params or []  # If no parameters are passed, create an empty list
+        self.page_size = page_size  # Number of entries per page
+        self.page = 1  # The first page (first by default)
 
-        # Добавляем параметры запроса и параметры пагинации
+    def get_data_by_pages(self) -> List[dict]:
+        """Returns data with pagination (LIMIT and OFFSET).
+
+        Returns:
+            list: List of records retrieved from the database for the current page.
+            """
+        offset = (self.page - 1) * self.page_size  # # Calculate offset based on current page
+        page_request = self.request + " LIMIT %s OFFSET %s" # Add LIMIT and OFFSET to the original SQL query
+
+        # Merge the original request parameters and pagination parameters
         request_params = self.params + [self.page_size, offset]
 
         try:
+            # Execute a request with parameters through the db.mysql_request_select function
             return db.mysql_request_select(page_request, request_params)
         except pymysql.Error as er:
             print(f'Database error: {er.errno} : {er.msg}')
             return []
 
     def print_results(self):
-        """Выводит данные с пагинацией через tabulate."""
+        """Prints the results of the query with pagination via tabulate."""
         while True:
-            result_table = self.get_data_by_pages()
-
+            result_table = self.get_data_by_pages() # Calls the get_data_by_pages method to get a list of dictionaries (each row is a dictionary).
             if not result_table:
                 print("\nNo more results found.")
                 break
-
-            # Преобразуем результат в формат для вывода
+            # Converts data from a list of dictionaries (result_table) to a list of lists (table_data) so that it can be passed to the tabulate function.
             table_data = [[str(cell) if cell is not None else '' for cell in row.values()] for row in result_table]
+
+            # Extracts the column names from the first row of data in the result_table and stores them as a list
             headers = list(result_table[0].keys())
 
-            # table_data = [list(row.values()) for row in result_table]
-            # headers = list(result_table[0].keys())
-
-            # Выводим таблицу
+            # Print the table with tabulate
             print(f"\nPage {self.page}:\n{'*' * 70}")
-            print(tabulate(table_data, headers=headers, tablefmt="grid",
+            print(tabulate(table_data, headers=headers, tablefmt="fancy_grid",
                            maxcolwidths=[10, 30, 40, 40, 40, 40, 40, 40, 40, 40]))
             print("*" * 40)
 
-            # Запрос на переход к следующей странице
-            if input("Press Enter to view next page or type 'q' to quit: ").lower() == 'q':
-                break
-            self.page += 1
+            # Offer the user to view the next page or exit the cycle
+            while True:
+                user_input = input("Press Enter to view next page or type 'q' to quit: ").lower()
+                if user_input == 'q':
+                    return # Ends execution of the function in which it was called if 'q' is entered
+                if user_input == '':
+                    self.page += 1 #Go to the next page
+                    break # Exit the inner loop to continue pagination
+                else:
+                    print("Invalid input. Please press Enter or type 'q'.")
+
