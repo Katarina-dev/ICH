@@ -180,12 +180,16 @@ def update_query_table(title:Optional[str]=None, genre:Optional[str] = None, rel
     try:
         # Используем transform_user_request для формирования запроса
         key_query, value_query, data_query = transform_user_request(title, genre, release_year, actor_last_name)
+
         # Add value 1 to data_query for request_count
         data_query.append(1)
+
         # Create an SQL query using the build_insert_query function
         request_update = build_insert_query(key_query, value_query)
+
         # Via the data_query parameter, values are passed to the SQL query for placeholders
         db.mysql_request_update(request_update, data_query)
+
     except pymysql.Error as er:
         # Handle database-specific errors
         return f'Database error: {er.errno} : {er.msg}'
