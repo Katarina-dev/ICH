@@ -52,7 +52,6 @@ def get_user_year() -> Optional[int]:
         Returns:
             Optional[int]: The valid year entered by the user or None if the input is empty.
     """
-
     while True:
         user_year = input('Input film release year:').strip()
         if user_year == '':

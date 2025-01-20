@@ -1,6 +1,6 @@
 import pymysql
 from db_connect import db
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Union
 
 
 def create_table_user_requests() -> str:
@@ -46,7 +46,7 @@ def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, rele
 
     if title:
         filters.append("f.title LIKE %s")
-        user_values.append(f"%{title}%")  # Поиск по подстроке
+        user_values.append(f"%{title}%")
     if genre:
         filters.append("c.name LIKE %s")
         user_values.append(f"%{genre}%")
@@ -62,7 +62,7 @@ def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, rele
     condition_query = " AND ".join(filters)
     return condition_query, user_values
 
-def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional[str]) -> Tuple[str, List[str]]:
+def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional[str]) -> tuple[str, str | None] | None:
     """Returns a query to search for movies based on user input.
 
     This function constructs an SQL query to search for movies based on the provided
@@ -109,8 +109,19 @@ def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional
         print(f"Error executing query: {e}")
         return None
 
-def transform_user_request(title=None, genre=None, release_year=None, actor_last_name=None):
-    """Добавляет новый запрос или увеличивает request_count, если такой уже есть."""
+def transform_user_request(title:Optional[str]=None, genre:Optional[str]=None, release_year: Optional[int]=None, actor_last_name:Optional[str]=None) -> Tuple[str, str, List[str | int]]:
+    """Forms a user request, removing None values.
+
+    Args:
+        title (Optional[str]): Movie title.
+        genre (Optional[str]): The genre of the movie.
+        release_year (Optional[int]): The year the movie was released.
+        actor_last_name (Optional[str]): Actor's last name.
+
+    Returns:
+        Tuple[str, str, List[str | int]]:
+            - `key_query`: A string containing the field names for the query, separated by commas.
+            - `value_query`: String with placeholders (`%s`), corresponding"""
 
     # Убираем пустые значения
     user_search = {
@@ -119,14 +130,23 @@ def transform_user_request(title=None, genre=None, release_year=None, actor_last
         "release_year": release_year,
         "actor_last_name": actor_last_name
     }
-    user_search = {field: value for field, value in user_search.items() if value is not None}  # Удаляем пустые значения
-    if not user_search:
-        print("No data provided.")
+    # user_search = {field: value for field, value in user_search.items() if value is not None}  # Removes None-values
+    filtered_search = {}
+    for field, value in user_search.items():
+        if value is not None:
+            filtered_search[field] = value
 
-    key_query = ", ".join(user_search.keys())
-    value_query = ", ".join(["%s"] * len(user_search))
-    data_query = list(user_search.values())
+    # if not user_search:
+    #     print("No data provided.")
+    if not filtered_search:
+        print("No data provided.")
+        return "", "", []
+
+    key_query = ", ".join(filtered_search.keys())
+    value_query = ", ".join(["%s"] * len(filtered_search))
+    data_query = list(filtered_search.values())
     return key_query, value_query, data_query
+
 
 
 def update_query_table(title=None, genre=None, release_year=None, actor_last_name=None):
