@@ -86,4 +86,3 @@ def get_user_actor() -> str:
             return actor_last_name
         except ValueError as e:
             print(f'Invalid actor last name. {e}')
-    return actor_last_name

@@ -24,7 +24,7 @@ class MovieByPages:
         Returns:
             list: List of records retrieved from the database for the current page.
             """
-        offset = (self.page - 1) * self.page_size  # # Calculate offset based on current page
+        offset = (self.page - 1) * self.page_size  # Calculate offset based on current page
         page_request = self.request + " LIMIT %s OFFSET %s" # Add LIMIT and OFFSET to the original SQL query
 
         # Merge the original request parameters and pagination parameters
