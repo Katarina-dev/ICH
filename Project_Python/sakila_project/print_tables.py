@@ -1,5 +1,4 @@
 from typing import Optional
-
 import pymysql
 from tabulate import tabulate
 from db_connect import db
@@ -39,7 +38,7 @@ class MovieByPages:
             return []
 
     def print_results(self):
-        """Prints the results of the query with pagination via tabulate."""
+        """Prints the results of the query with pagination via tabulate library."""
         while True:
             result_table = self.get_data_by_pages() # Calls the get_data_by_pages method to get a list of dictionaries (each row is a dictionary).
             if not result_table:

@@ -63,7 +63,7 @@ def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, rele
     return condition_query, user_values
 
 def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional[str]) -> tuple[str, str | None] | None:
-    """Returns a query to search for movies based on user input.
+    """Returns a SQL-query to search for movies based on user input.
 
     This function constructs an SQL query to search for movies based on the provided
     condition query and user values. It includes details such as film ID, title, genre,
@@ -212,7 +212,7 @@ def get_popular_user_requests() -> Optional[str]:
         Exception: If there is any other unexpected error.
     """
     try:
-        request_popular = f'SELECT * FROM `user_queries` ORDER BY request_count desc'
+        request_popular = f'SELECT * FROM `user_queries` ORDER BY request_count desc, date_of_request desc'
         # Return a query string to pass to MovieByPages.print_results, which is called in the show_popular_queries() function of the main module
         return request_popular
     except pymysql.Error as er:

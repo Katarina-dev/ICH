@@ -1,5 +1,4 @@
 from multiprocessing.connection import Connection
-
 import pymysql
 import os
 from dotenv import load_dotenv
@@ -70,9 +69,4 @@ class ConnectionDB:
 
 
 db = ConnectionDB()
-# db.connection = None  # 1. Проверяем случай, когда соединение отсутствует
-# print(db.close_connection())  # Ожидаем: "No active connection to close"
-#
-# db.connection = type("FakeConnection", (), {"close": lambda: 1 / 0})()  # 2. Ошибка при закрытии
-# print(db.close_connection())  # Ожидаем: "Error while closing connection: division by zero"
 
