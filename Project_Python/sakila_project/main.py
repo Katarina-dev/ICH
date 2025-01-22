@@ -53,34 +53,37 @@ def search_movies():
         generates an SQL query, and then creates a pagination object to display the results.
         If at least one criterion is specified, the query is saved to the history
     """
-    # Prepare filters based on user input
-    filter_result = prepare_filters()
+    try:
+        # Prepare filters based on user input
+        filter_result = prepare_filters()
 
-    # If no filters are specified, exit
-    if not filter_result[0]:
-        print("No search criteria provided. Query will not be saved.")
-        return
+        # If no filters are specified, exit
+        if not filter_result[0]:
+            print("No search criteria provided. Query will not be saved.")
+            return
 
-    # Unpack the result prepare_filters
-    condition_filter, user_values, key_query, title, genre, release_year, actor_last_name = filter_result
+        # Unpack the result prepare_filters
+        condition_filter, user_values, key_query, title, genre, release_year, actor_last_name = filter_result
 
-    # Save the request to history if at least one criterion is specified
-    if key_query:
-        sql_requests.update_query_table(
-            title=title,
-            genre=genre,
-            release_year=release_year,
-            actor_last_name=actor_last_name
-        )
+        # Save the request to history if at least one criterion is specified
+        if key_query:
+            sql_requests.update_query_table(
+                title=title,
+                genre=genre,
+                release_year=release_year,
+                actor_last_name=actor_last_name
+            )
 
-    # Generate an SQL query based on filters
-    query, settings = sql_requests.get_movies_by_criteria(condition_filter, user_values)
+        # Generate an SQL query based on filters
+        query, settings = sql_requests.get_movies_by_criteria(condition_filter, user_values)
 
-    # Create a pagination object with the correct SQL query and settings
-    pages = MovieByPages(query, settings, page_size=10)
-    pages.page = 1
-    pages.params = settings
-    pages.print_results()
+        # Create a pagination object with the correct SQL query and settings
+        pages = MovieByPages(query, settings, page_size=10)
+        pages.page = 1
+        pages.params = settings
+        pages.print_results()
+    except RuntimeError as ex:
+        print(f"An error occurred: {ex}")
 
 def show_popular_queries():
     """

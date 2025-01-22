@@ -11,6 +11,12 @@ class ConnectionDB:
     def __init__(self):
         """Initialize the connection to the database using .env variables"""
         self.connection: Optional[Connection] = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
+
+        required_env_vars = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']
+        for var in required_env_vars:
+            if not os.getenv(var):
+                raise EnvironmentError(f"Missing required environment variable: {var}")
+
         try:
             dbconfig: Dict[str, Any] = {
                             'host': os.getenv('DB_HOST'),
@@ -21,10 +27,8 @@ class ConnectionDB:
                             'cursorclass': pymysql.cursors.DictCursor
             }
             self.connection = pymysql.connect(**dbconfig)
-            print("Connection successfully established")
         except Exception as ex:
-            print("Connection refused")
-            print(ex)
+            raise ConnectionError(f"Connection refused: {ex}")
 
     def _execute_query(self, sql: str, params: Optional[Union[Dict[str, Any], list]] = None, commit: bool = False) -> Optional[list]:
         """Execute SQL query and return the result (if any)."""
@@ -36,9 +40,7 @@ class ConnectionDB:
                 result = cursor.fetchall()  # Save results before exit from 'with' block
             return result
         except Exception as ex:
-            print("Query execution failed")
-            print(ex)
-            return None
+            raise RuntimeError(f"Query execution failed: {ex}")
 
     def mysql_request_create(self, sql: str) -> Optional[list]:
         """Execute CREATE TABLE query."""
@@ -48,9 +50,9 @@ class ConnectionDB:
         """Execute INSERT INTO query and rolls back the transaction if it fails."""
         try:
             return self._execute_query(sql, data, commit=True)
-        except Exception as er:
-            print(f'Database error: {er.errno} : {er.msg}')
+        except Exception as ex:
             self.connection.rollback()
+            raise RuntimeError(f"Database error: {ex}")
 
     def mysql_request_select(self, sql:str, params:Optional[Union[Dict[str, Any], list]]=None) -> Optional[list]:
         """Execute SELECT query."""
@@ -62,11 +64,8 @@ class ConnectionDB:
             try:
                 self.connection.close()
                 self.connection = None  #reset the connection to avoid closing it again
-                return f"Connection closed"
             except Exception as ex:
-                return f'Connection refused. Error: {ex}'
-        return f'No active connection to close'
-
+                raise ConnectionError(f"Error closing connection: {ex}")
 
 db = ConnectionDB()
 

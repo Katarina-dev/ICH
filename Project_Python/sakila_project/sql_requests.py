@@ -3,7 +3,7 @@ from db_connect import db
 from typing import Optional, Tuple, List
 
 
-def create_table_user_requests() -> str:
+def create_table_user_requests() -> Optional[str]:
     """Creates a table 'user_queries' in the database if it does not exist.
 
         This function sends a SQL query to the database to create a table that stores
@@ -21,8 +21,12 @@ def create_table_user_requests() -> str:
                     request_count INT DEFAULT 1,
                     date_of_request DATETIME DEFAULT CURRENT_TIMESTAMP,
                     UNIQUE KEY idx_user_request (title, genre, release_year, actor_last_name));''') #A unique index is created for the combination of title, genre, release_year, actor_last_name columns. This ensures that there are no duplicate queries with the same parameters in the table and necessary for count user queries.
-    db.mysql_request_create(user_queries)
-    return f'Table user_queries was created successfully'
+    try:
+        db.mysql_request_create(user_queries)
+        return None #If the table is created successfully, the function returns None
+    except Exception as e:
+        raise RuntimeError(f"Failed to create table: {e}")
+
 
 def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, release_year: Optional[int]=None, actor_last_name:Optional[str]=None)-> Tuple[Optional[str], List[str]]:#If the user does not pass any of these parameters, they are automatically set to None.
     """Searches for movies based on user input.
@@ -62,7 +66,7 @@ def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, rele
     condition_query = " AND ".join(filters)
     return condition_query, user_values
 
-def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional[str]) -> tuple[str, str | None] | None:
+def get_movies_by_criteria(condition_query: Optional[str], user_values: List[str]) -> Tuple[Optional[str], List[str]]:
     """Returns a SQL-query to search for movies based on user input.
 
     This function constructs an SQL query to search for movies based on the provided
@@ -106,8 +110,7 @@ def get_movies_by_criteria(condition_query: Optional[str], user_values: Optional
     try:
         return request_movies, user_values
     except Exception as e:
-        print(f"Error executing query: {e}")
-        return None
+        raise RuntimeError(f"Error executing query: {e}")
 
 def transform_user_request(title:Optional[str]=None, genre:Optional[str]=None, release_year: Optional[int]=None, actor_last_name:Optional[str]=None) -> Tuple[str, str, List[str | int]]:
     """Forms a user request, removing None values.
