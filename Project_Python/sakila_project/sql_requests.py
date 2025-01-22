@@ -159,12 +159,12 @@ def build_insert_query(key_query: str, value_query: str) -> str:
     Example:
         If key_query = "title, genre", value_query = "%s, %s", the resulting query will be:
         "INSERT INTO user_queries (title, genre, request_count) VALUES (%s, %s, %s)
-        ON DUPLICATE KEY UPDATE request_count = request_count + 1;"
+        ON DUPLICATE KEY UPDATE request_count = request_count + 1, date_of_request = NOW();"
     """
     return f"""
         INSERT INTO user_queries ({key_query}, request_count)
         VALUES ({value_query}, %s)
-        ON DUPLICATE KEY UPDATE request_count = request_count + 1;
+        ON DUPLICATE KEY UPDATE request_count = request_count + 1, date_of_request = NOW();
     """
 
 def update_query_table(title:Optional[str]=None, genre:Optional[str] = None, release_year: Optional[int] = None, actor_last_name:Optional[str] = None) -> Optional[str]:
@@ -193,11 +193,13 @@ def update_query_table(title:Optional[str]=None, genre:Optional[str] = None, rel
         # Via the data_query parameter, values are passed to the SQL query for placeholders
         db.mysql_request_update(request_update, data_query)
 
+    # Handle database-specific errors
     except pymysql.Error as er:
-        # Handle database-specific errors
-        return f'Database error: {er.errno} : {er.msg}'
+        db.rollback()
+        return f'Database error: {er} : {er.args[1]}'
+    # Catch any other unexpected errors
     except Exception as e:
-        # Catch any other unexpected errors
+        db.rollback()
         return f"An unexpected error occurred: {e}"
 
 
@@ -219,7 +221,7 @@ def get_popular_user_requests() -> Optional[str]:
         # Return a query string to pass to MovieByPages.print_results, which is called in the show_popular_queries() function of the main module
         return request_popular
     except pymysql.Error as er:
-        return f'Database error at getting popular requests: {er.errno} : {er.msg}'
+        return f'Database error at getting popular requests: {er} : {er.args[1]}'
     except Exception as e:
         return f"An unexpected error occurred at getting popular requests: {e}"
 

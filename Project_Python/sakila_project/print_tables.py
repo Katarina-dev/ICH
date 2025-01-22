@@ -33,8 +33,12 @@ class MovieByPages:
         try:
             # Execute a request with parameters through the db.mysql_request_select function
             return db.mysql_request_select(page_request, request_params)
+        except pymysql.err.ProgrammingError as ex:
+        # Check if the table with popular requests exists
+            if ex.args[0] == 1146:
+                print("Error: Table with popular requests not found.")
         except pymysql.Error as er:
-            print(f'Database error: {er.errno} : {er.msg}')
+            print(f'Database error: {er}: {er.args[1]}')
             return []
 
     def print_results(self):

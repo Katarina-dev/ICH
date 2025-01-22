@@ -1,4 +1,5 @@
 import pymysql
+import unittest
 
 def mysql_request_create(sql):
     try:
@@ -59,6 +60,7 @@ def mysql_request_update(request_update, data):
             # print('Connection still open!')
             connection.close()
             print('Connection closed')
+
 
 def create_table_user_requests():
     """Создает таблицу user_queries, если она не существует."""

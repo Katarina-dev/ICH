@@ -1,6 +1,7 @@
 import sql_requests
 import user_input
 from print_tables import MovieByPages
+from db_connect import db
 
 
 def get_all_movies() -> None:
@@ -142,7 +143,6 @@ def main():
         elif user_option == 4:
             print("Goodbye!")
             break
-
         else:
             print("Invalid option. Please enter a number (1-4).")
 
