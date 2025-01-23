@@ -21,7 +21,7 @@ def get_user_title() -> str:
             return title
         except ValueError as e:
             print(f'Invalid title. {e}')
-    return title
+
 
 def get_user_genre() -> str:
     """Input a genre name from user and return it.
@@ -59,7 +59,7 @@ def get_user_year() -> Optional[int]:
         try:
             year = int(user_year)
             if not (1901 <= year and year <= 2155):
-                raise ValueError('Year must be between 1901 and 2155')
+                raise ValueError('Year must be between 1901 and 2155.')
             return year
         except ValueError as e:
             if user_year.isdigit():
@@ -80,7 +80,7 @@ def get_user_actor() -> str:
         try:
             actor_last_name = input(' - input actor last name:').strip()
             if len(actor_last_name) > 50:
-                raise ValueError('actor last name must be less than 50 characters')
+                raise ValueError('Actor last name must be less than 50 characters')
             if any(char.isdigit() for char in actor_last_name):
                 raise ValueError('The actor last name must not contain numbers.')
             return actor_last_name
