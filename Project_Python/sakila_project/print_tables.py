@@ -41,8 +41,19 @@ class MovieByPages:
             print(f'Database error: {er}: {er.args[1]}')
             return []
 
-    def print_results(self):
-        """Prints the results of the query with pagination via tabulate library."""
+    def print_results(self) -> None:
+        """Prints the results of the query with pagination via tabulate library.
+
+           The method performs the following steps:
+        1. Retrieves a list of results for the current page.
+        2. Converts the list of dictionaries into a format compatible with `tabulate`.
+        3. Extracts column headers from the result and displays the table.
+        4. Prompts the user to either continue to the next page or quit the process.
+
+        Pagination behavior:
+        - The user can press Enter to load the next page.
+        - The user can type 'q' to quit the process and exit the function."""
+
         while True:
             result_table = self.get_data_by_pages() # Calls the get_data_by_pages method to get a list of dictionaries (each row is a dictionary).
             if not result_table:

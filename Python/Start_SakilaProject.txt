@@ -1,0 +1,3 @@
+C:\Users\user\ICH\Project_Python\sakila_project>.venv\Scripts\activate.bat
+
+(.venv) C:\Users\user\ICH\Project_Python\sakila_project>python main.py

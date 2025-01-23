@@ -1,7 +1,6 @@
 import sql_requests
 import user_input
 from print_tables import MovieByPages
-from db_connect import db
 
 
 def get_all_movies() -> None:
@@ -36,7 +35,7 @@ def prepare_filters() -> tuple:
 
     # Checking if there is at least one criterion
     if not any([title, genre, release_year, actor_last_name]):
-        return None, None, None
+        return None, None, None, None, None, None, None
 
     # Generating filters and values for an SQL query
     condition_filter, user_values = sql_requests.get_filters_values(title, genre, release_year, actor_last_name)
@@ -80,8 +79,8 @@ def search_movies():
 
         # Create a pagination object with the correct SQL query and settings
         pages = MovieByPages(query, settings, page_size=10)
-        pages.page = 1
-        pages.params = settings
+        # pages.page = 1
+        # pages.params = settings
         pages.print_results()
     except RuntimeError as ex:
         print(f"An error occurred: {ex}")
@@ -115,7 +114,7 @@ def main():
     sql_requests.create_table_user_requests()
 
     # Print the welcome message and options for the user
-    print("Welcome to program for working with Database \"SAKILA\"!\n")
+    print("\nWelcome to application \"SAKILA SEARCH\" for working with Database \"SAKILA\"!\n")
 
     while True:
         user_option = input("\nPlease input the required option for further work:\n"

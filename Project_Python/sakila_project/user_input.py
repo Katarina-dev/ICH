@@ -2,7 +2,7 @@
 from typing import Optional
 
 
-def get_user_title() -> str:
+def get_user_title() -> Optional[str]:
     """Input a title name from user and return it.
 
     This function prompts the user for a movie title and performs validation checks.
@@ -14,6 +14,8 @@ def get_user_title() -> str:
     while True:
         try:
             title = input(' - input film title:').strip()
+            if title == '':
+                return None
             if len(title) > 100:
                 raise ValueError('Title must be less than 100 characters')
             if any(char.isdigit() for char in title):
@@ -23,7 +25,7 @@ def get_user_title() -> str:
             print(f'Invalid title. {e}')
 
 
-def get_user_genre() -> str:
+def get_user_genre() -> Optional[str]:
     """Input a genre name from user and return it.
 
     This function prompts the user for a genre name and performs validation checks.
@@ -35,6 +37,8 @@ def get_user_genre() -> str:
     while True:
         try:
             genre = input(' - input genre:').strip()
+            if genre == '':
+                return None
             if len(genre) > 32:
                 raise ValueError('Name of genre must be less than 32 characters')
             if any(char.isdigit() for char in genre):
@@ -67,7 +71,7 @@ def get_user_year() -> Optional[int]:
             else:
                 print(f'Invalid input. Please enter a numeric year.')
 
-def get_user_actor() -> str:
+def get_user_actor() -> Optional[str]:
     """Input an actor's last name from user and return it.
 
     This function prompts the user for an actor's last name and performs validation checks.
@@ -79,6 +83,8 @@ def get_user_actor() -> str:
     while True:
         try:
             actor_last_name = input(' - input actor last name:').strip()
+            if actor_last_name == '':
+                return None
             if len(actor_last_name) > 50:
                 raise ValueError('Actor last name must be less than 50 characters')
             if any(char.isdigit() for char in actor_last_name):

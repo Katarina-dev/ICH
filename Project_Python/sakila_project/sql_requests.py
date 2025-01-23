@@ -28,7 +28,10 @@ def create_table_user_requests() -> Optional[str]:
         raise RuntimeError(f"Failed to create table: {e}")
 
 
-def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, release_year: Optional[int]=None, actor_last_name:Optional[str]=None)-> Tuple[Optional[str], List[str]]:#If the user does not pass any of these parameters, they are automatically set to None.
+def get_filters_values(title:Optional[str] =None,
+                       genre:Optional[str]=None,
+                       release_year: Optional[int]=None,
+                       actor_last_name:Optional[str]=None)-> Tuple[Optional[str], List[str]]:#If the user does not pass any of these parameters, they are automatically set to None.
     """Searches for movies based on user input.
 
     This function constructs SQL query conditions and corresponding values based on the provided
@@ -45,8 +48,8 @@ def get_filters_values(title:Optional[str] =None, genre:Optional[str]=None, rele
         string with sql condition for substitution into the query and user_values
         are the parameter values that will be substituted into the %s parameter
     """
-    filters = []
-    user_values = []
+    filters = [] # A list of conditions for the WHERE clause
+    user_values = [] # A list of values to be substituted into the query
 
     if title:
         filters.append("f.title LIKE %s")
@@ -124,26 +127,28 @@ def transform_user_request(title:Optional[str]=None, genre:Optional[str]=None, r
     Returns:
         Tuple[str, str, List[str | int]]:
             - `key_query`: A string containing the field names for the query, separated by commas.
-            - `value_query`: String with placeholders (`%s`), corresponding"""
+            - `value_query`: String with placeholders (`%s`), corresponding
+            - `data_query`: A list of values to be substituted into the query."""
     user_search = {
         "title": title,
         "genre": genre,
         "release_year": release_year,
         "actor_last_name": actor_last_name
     }
-
+    # Removes None-values from the dictionary
     filtered_search = {}
     for field, value in user_search.items():
         if value is not None:
-            filtered_search[field] = value# Removes None-values
+            filtered_search[field] = value
 
     if not filtered_search:
         print("No data provided.")
         return "", "", []
 
-    key_query = ", ".join(filtered_search.keys())
-    value_query = ", ".join(["%s"] * len(filtered_search))
-    data_query = list(filtered_search.values())
+    key_query = ", ".join(filtered_search.keys()) # Forming a string with field names
+    value_query = ", ".join(["%s"] * len(filtered_search)) # Forming a string with placeholders
+    data_query = list(filtered_search.values()) # Forming a list of values to be substituted into the query
+
     return key_query, value_query, data_query
 
 def build_insert_query(key_query: str, value_query: str) -> str:

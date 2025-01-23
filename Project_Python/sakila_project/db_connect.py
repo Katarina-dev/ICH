@@ -1,6 +1,6 @@
-from multiprocessing.connection import Connection
-from sqlite3 import IntegrityError, OperationalError
-from urllib.parse import uses_query
+# from multiprocessing.connection import Connection
+# from sqlite3 import IntegrityError, OperationalError
+# from urllib.parse import uses_query
 
 import pymysql
 import os
@@ -13,12 +13,12 @@ class ConnectionDB:
     """Class for working with MySQL database."""
     def __init__(self):
         """Initialize the connection to the database using .env variables"""
-        self.connection: Optional[Connection] = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
+        self.connection: Optional[pymysql.connect.Connection] = None #needed to ensure the finally block works correctly and to prevent errors when trying to close a connection if it was not successfully established.
 
-        # required_env_vars = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']
-        # for var in required_env_vars:
-        #     if not os.getenv(var):
-        #         raise EnvironmentError(f"Missing required environment variable: {var}")
+        required_env_vars = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME']
+        for var in required_env_vars:
+            if not os.getenv(var):
+                raise EnvironmentError(f"Missing required environment variable: {var}")
 
         # try:
         dbconfig: Dict[str, Any] = {
@@ -30,8 +30,7 @@ class ConnectionDB:
                         'cursorclass': pymysql.cursors.DictCursor
         }
         self.connection = pymysql.connect(**dbconfig)
-        # except Exception as ex:
-        #     raise ConnectionError(f"Connection refused: {ex}")
+
 
     def _execute_query(self, sql: str, params: Optional[Union[Dict[str, Any], list]] = None, commit: bool = False) -> Optional[list]:
         """Execute SQL query and return the result (if any)."""
@@ -42,8 +41,7 @@ class ConnectionDB:
                 self.connection.commit()
             result = cursor.fetchall()  # Save results before exit from 'with' block
         return result
-        # except Exception as ex:
-        #     raise RuntimeError(f"Query execution failed: {ex}")
+
 
     def mysql_request_create(self, sql: str) -> Optional[list]:
         """Execute CREATE TABLE query."""
@@ -63,14 +61,6 @@ class ConnectionDB:
         if self.connection:
             self.connection.rollback()
 
-    # def table_exists(self, user_queries: str) -> bool:
-    #     """Check if a table exists in the database."""
-    #     try:
-    #         query = "SHOW TABLES LIKE %s"
-    #         result = self._execute_query(query, [user_queries])
-    #         return bool(result)
-    #     except Exception as ex:
-    #         raise RuntimeError(f"Failed to check table existence: {ex}")
 
     def close_connection(self) -> None:
         """Close the connection to the database."""
