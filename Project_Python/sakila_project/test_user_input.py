@@ -5,6 +5,7 @@ import io
 
 
 class MyTestCase(unittest.TestCase):
+    """Test user input functions."""
 
     @patch('builtins.input', side_effect=['A' * 101, 'Title123', 'Valid Title']) #mock input from the user
     @patch('sys.stdout', new_callable=io.StringIO) #io.StringIO - file object that will store the output of the print function
