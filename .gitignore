@@ -161,3 +161,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 SQL/sample_airbnb.listingsAndReviews.json
+/Python/hw/DataAnalysis/DA_Plotly.ipynb
+/Python/hw/DataAnalysis/events.csv

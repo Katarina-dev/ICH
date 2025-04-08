@@ -1,0 +1,1888 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20243.24.1010.1014                               -->
+<workbook original-version='18.1' source-build='2024.3.0 (20243.24.1010.1014)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AnimationOnByDefault />
+    <MarkAnimation />
+    <ObjectModelEncapsulateLegacy />
+    <ObjectModelExtractV2 />
+    <ObjectModelTableType />
+    <SchemaViewerObjectModel />
+    <SheetIdentifierTracking />
+    <_.fcp.VConnDownstreamExtractsWithWarnings.true...VConnDownstreamExtractsWithWarnings />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource caption='airlines+' inline='true' name='federated.11dwwd41r8fc4q1451uiy0099rre' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='airlines' name='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb'>
+            <connection class='textscan' directory='C:/Users/user/ICH/Tableau/Project/Датасет для проекта-20240310T135610Z-001/Датасет для проекта' filename='airlines.csv' password='' server='' />
+          </named-connection>
+        </named-connections>
+        <relation type='collection'>
+          <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airlines.csv' table='[airlines#csv]' type='table'>
+            <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+              <column datatype='string' name='IATA_CODE' ordinal='0' />
+              <column datatype='string' name='AIRLINE' ordinal='1' />
+            </columns>
+          </relation>
+          <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='flights_light.csv' table='[flights_light#csv]' type='table'>
+            <columns character-set='UTF-16LE' header='yes' locale='ru_RU' separator='&#9;'>
+              <column datatype='string' name='Airline' ordinal='0' />
+              <column datatype='string' name='Cancellation Reason' ordinal='1' />
+              <column datatype='integer' name='DAY' ordinal='2' />
+              <column datatype='integer' name='Day Of Week' ordinal='3' />
+              <column datatype='string' name='Destination Airport' ordinal='4' />
+              <column datatype='integer' name='Flight Number' ordinal='5' />
+              <column datatype='integer' name='Month' ordinal='6' />
+              <column datatype='string' name='Origin Airport' ordinal='7' />
+              <column datatype='string' name='Tail Number' ordinal='8' />
+              <column datatype='integer' name='Year' ordinal='9' />
+              <column datatype='integer' name='Air System Delay' ordinal='10' />
+              <column datatype='integer' name='Air Time' ordinal='11' />
+              <column datatype='integer' name='Airline Delay' ordinal='12' />
+              <column datatype='integer' name='Arrival Delay' ordinal='13' />
+              <column datatype='integer' name='Arrival Time' ordinal='14' />
+              <column datatype='integer' name='Cancelled' ordinal='15' />
+              <column datatype='integer' name='Departure Delay' ordinal='16' />
+              <column datatype='integer' name='Departure Time' ordinal='17' />
+              <column datatype='integer' name='Distance' ordinal='18' />
+              <column datatype='integer' name='Diverted' ordinal='19' />
+              <column datatype='integer' name='Elapsed Time' ordinal='20' />
+              <column datatype='integer' name='Late Aircraft Delay' ordinal='21' />
+              <column datatype='integer' name='Scheduled Arrival' ordinal='22' />
+              <column datatype='integer' name='Scheduled Departure' ordinal='23' />
+              <column datatype='integer' name='Scheduled Time' ordinal='24' />
+              <column datatype='integer' name='Security Delay' ordinal='25' />
+              <column datatype='integer' name='Taxi In' ordinal='26' />
+              <column datatype='integer' name='Taxi Out' ordinal='27' />
+              <column datatype='integer' name='Weather Delay' ordinal='28' />
+              <column datatype='integer' name='Wheels Off' ordinal='29' />
+              <column datatype='integer' name='Wheels On' ordinal='30' />
+            </columns>
+          </relation>
+          <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airports.csv1' table='[airports#csv]' type='table'>
+            <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+              <column datatype='string' name='IATA_CODE' ordinal='0' />
+              <column datatype='string' name='AIRPORT' ordinal='1' />
+              <column datatype='string' name='CITY' ordinal='2' />
+              <column datatype='string' name='STATE' ordinal='3' />
+              <column datatype='string' name='COUNTRY' ordinal='4' />
+              <column datatype='real' name='LATITUDE' ordinal='5' />
+              <column datatype='real' name='LONGITUDE' ordinal='6' />
+            </columns>
+          </relation>
+          <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airports.csv' table='[airports#csv]' type='table'>
+            <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+              <column datatype='string' name='IATA_CODE' ordinal='0' />
+              <column datatype='string' name='AIRPORT' ordinal='1' />
+              <column datatype='string' name='CITY' ordinal='2' />
+              <column datatype='string' name='STATE' ordinal='3' />
+              <column datatype='string' name='COUNTRY' ordinal='4' />
+              <column datatype='real' name='LATITUDE' ordinal='5' />
+              <column datatype='real' name='LONGITUDE' ordinal='6' />
+            </columns>
+          </relation>
+        </relation>
+        <cols>
+          <map key='[AIRLINE]' value='[airlines.csv].[AIRLINE]' />
+          <map key='[AIRPORT (airports.csv1)]' value='[airports.csv1].[AIRPORT]' />
+          <map key='[AIRPORT]' value='[airports.csv].[AIRPORT]' />
+          <map key='[Air System Delay]' value='[flights_light.csv].[Air System Delay]' />
+          <map key='[Air Time]' value='[flights_light.csv].[Air Time]' />
+          <map key='[Airline Delay]' value='[flights_light.csv].[Airline Delay]' />
+          <map key='[Airline]' value='[flights_light.csv].[Airline]' />
+          <map key='[Arrival Delay]' value='[flights_light.csv].[Arrival Delay]' />
+          <map key='[Arrival Time]' value='[flights_light.csv].[Arrival Time]' />
+          <map key='[CITY (airports.csv1)]' value='[airports.csv1].[CITY]' />
+          <map key='[CITY]' value='[airports.csv].[CITY]' />
+          <map key='[COUNTRY (airports.csv1)]' value='[airports.csv1].[COUNTRY]' />
+          <map key='[COUNTRY]' value='[airports.csv].[COUNTRY]' />
+          <map key='[Cancellation Reason]' value='[flights_light.csv].[Cancellation Reason]' />
+          <map key='[Cancelled]' value='[flights_light.csv].[Cancelled]' />
+          <map key='[DAY]' value='[flights_light.csv].[DAY]' />
+          <map key='[Day Of Week]' value='[flights_light.csv].[Day Of Week]' />
+          <map key='[Departure Delay]' value='[flights_light.csv].[Departure Delay]' />
+          <map key='[Departure Time]' value='[flights_light.csv].[Departure Time]' />
+          <map key='[Destination Airport]' value='[flights_light.csv].[Destination Airport]' />
+          <map key='[Distance]' value='[flights_light.csv].[Distance]' />
+          <map key='[Diverted]' value='[flights_light.csv].[Diverted]' />
+          <map key='[Elapsed Time]' value='[flights_light.csv].[Elapsed Time]' />
+          <map key='[Flight Number]' value='[flights_light.csv].[Flight Number]' />
+          <map key='[IATA_CODE (airports.csv)]' value='[airports.csv].[IATA_CODE]' />
+          <map key='[IATA_CODE (airports.csv1)]' value='[airports.csv1].[IATA_CODE]' />
+          <map key='[IATA_CODE]' value='[airlines.csv].[IATA_CODE]' />
+          <map key='[LATITUDE (airports.csv1)]' value='[airports.csv1].[LATITUDE]' />
+          <map key='[LATITUDE]' value='[airports.csv].[LATITUDE]' />
+          <map key='[LONGITUDE (airports.csv1)]' value='[airports.csv1].[LONGITUDE]' />
+          <map key='[LONGITUDE]' value='[airports.csv].[LONGITUDE]' />
+          <map key='[Late Aircraft Delay]' value='[flights_light.csv].[Late Aircraft Delay]' />
+          <map key='[Month]' value='[flights_light.csv].[Month]' />
+          <map key='[Origin Airport]' value='[flights_light.csv].[Origin Airport]' />
+          <map key='[STATE (airports.csv1)]' value='[airports.csv1].[STATE]' />
+          <map key='[STATE]' value='[airports.csv].[STATE]' />
+          <map key='[Scheduled Arrival]' value='[flights_light.csv].[Scheduled Arrival]' />
+          <map key='[Scheduled Departure]' value='[flights_light.csv].[Scheduled Departure]' />
+          <map key='[Scheduled Time]' value='[flights_light.csv].[Scheduled Time]' />
+          <map key='[Security Delay]' value='[flights_light.csv].[Security Delay]' />
+          <map key='[Tail Number]' value='[flights_light.csv].[Tail Number]' />
+          <map key='[Taxi In]' value='[flights_light.csv].[Taxi In]' />
+          <map key='[Taxi Out]' value='[flights_light.csv].[Taxi Out]' />
+          <map key='[Weather Delay]' value='[flights_light.csv].[Weather Delay]' />
+          <map key='[Wheels Off]' value='[flights_light.csv].[Wheels Off]' />
+          <map key='[Wheels On]' value='[flights_light.csv].[Wheels On]' />
+          <map key='[Year]' value='[flights_light.csv].[Year]' />
+        </cols>
+        <metadata-records>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[airlines.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ru&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₽&quot;</attribute>
+              <attribute datatype='string' name='decimal-char'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ru_RU&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='thousands-char'>&quot; &quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-16LE&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ru&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₽&quot;</attribute>
+              <attribute datatype='string' name='decimal-char'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='field-delimiter'>&quot;\\t&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ru_RU&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='thousands-char'>&quot; &quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ru&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₽&quot;</attribute>
+              <attribute datatype='string' name='decimal-char'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ru_RU&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='thousands-char'>&quot; &quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='capability'>
+            <remote-name />
+            <remote-type>0</remote-type>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias />
+            <aggregation>Count</aggregation>
+            <contains-null>true</contains-null>
+            <attributes>
+              <attribute datatype='string' name='character-set'>&quot;UTF-8&quot;</attribute>
+              <attribute datatype='string' name='collation'>&quot;ru&quot;</attribute>
+              <attribute datatype='string' name='currency'>&quot;₽&quot;</attribute>
+              <attribute datatype='string' name='decimal-char'>&quot;,&quot;</attribute>
+              <attribute datatype='string' name='header-row'>&quot;true&quot;</attribute>
+              <attribute datatype='string' name='locale'>&quot;ru_RU&quot;</attribute>
+              <attribute datatype='string' name='single-char'>&quot;&quot;</attribute>
+              <attribute datatype='string' name='thousands-char'>&quot; &quot;</attribute>
+            </attributes>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>IATA_CODE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[IATA_CODE]</local-name>
+            <parent-name>[airlines.csv]</parent-name>
+            <remote-alias>IATA_CODE</remote-alias>
+            <ordinal>0</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>AIRLINE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[AIRLINE]</local-name>
+            <parent-name>[airlines.csv]</parent-name>
+            <remote-alias>AIRLINE</remote-alias>
+            <ordinal>1</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Airline</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Airline]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Airline</remote-alias>
+            <ordinal>2</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Cancellation Reason</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Cancellation Reason]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Cancellation Reason</remote-alias>
+            <ordinal>3</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <approx-count>1</approx-count>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>DAY</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[DAY]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>DAY</remote-alias>
+            <ordinal>4</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Day Of Week</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Day Of Week]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Day Of Week</remote-alias>
+            <ordinal>5</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Destination Airport</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Destination Airport]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Destination Airport</remote-alias>
+            <ordinal>6</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Flight Number</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Flight Number]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Flight Number</remote-alias>
+            <ordinal>7</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Month</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Month]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Month</remote-alias>
+            <ordinal>8</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Origin Airport</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Origin Airport]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Origin Airport</remote-alias>
+            <ordinal>9</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Tail Number</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[Tail Number]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Tail Number</remote-alias>
+            <ordinal>10</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Year</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Year]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Year</remote-alias>
+            <ordinal>11</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Air System Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Air System Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Air System Delay</remote-alias>
+            <ordinal>12</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Air Time</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Air Time]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Air Time</remote-alias>
+            <ordinal>13</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Airline Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Airline Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Airline Delay</remote-alias>
+            <ordinal>14</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Arrival Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Arrival Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Arrival Delay</remote-alias>
+            <ordinal>15</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Arrival Time</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Arrival Time]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Arrival Time</remote-alias>
+            <ordinal>16</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Cancelled</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Cancelled]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Cancelled</remote-alias>
+            <ordinal>17</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Departure Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Departure Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Departure Delay</remote-alias>
+            <ordinal>18</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Departure Time</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Departure Time]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Departure Time</remote-alias>
+            <ordinal>19</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Distance</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Distance]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Distance</remote-alias>
+            <ordinal>20</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Diverted</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Diverted]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Diverted</remote-alias>
+            <ordinal>21</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Elapsed Time</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Elapsed Time]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Elapsed Time</remote-alias>
+            <ordinal>22</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Late Aircraft Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Late Aircraft Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Late Aircraft Delay</remote-alias>
+            <ordinal>23</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Scheduled Arrival</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Scheduled Arrival]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Scheduled Arrival</remote-alias>
+            <ordinal>24</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Scheduled Departure</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Scheduled Departure]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Scheduled Departure</remote-alias>
+            <ordinal>25</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Scheduled Time</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Scheduled Time]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Scheduled Time</remote-alias>
+            <ordinal>26</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Security Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Security Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Security Delay</remote-alias>
+            <ordinal>27</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Taxi In</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Taxi In]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Taxi In</remote-alias>
+            <ordinal>28</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Taxi Out</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Taxi Out]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Taxi Out</remote-alias>
+            <ordinal>29</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Weather Delay</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Weather Delay]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Weather Delay</remote-alias>
+            <ordinal>30</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Wheels Off</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Wheels Off]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Wheels Off</remote-alias>
+            <ordinal>31</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>Wheels On</remote-name>
+            <remote-type>20</remote-type>
+            <local-name>[Wheels On]</local-name>
+            <parent-name>[flights_light.csv]</parent-name>
+            <remote-alias>Wheels On</remote-alias>
+            <ordinal>32</ordinal>
+            <local-type>integer</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>IATA_CODE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[IATA_CODE (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>IATA_CODE</remote-alias>
+            <ordinal>33</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>AIRPORT</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[AIRPORT (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>AIRPORT</remote-alias>
+            <ordinal>34</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>CITY</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[CITY (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>CITY</remote-alias>
+            <ordinal>35</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>STATE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[STATE (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>STATE</remote-alias>
+            <ordinal>36</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>COUNTRY</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[COUNTRY (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>COUNTRY</remote-alias>
+            <ordinal>37</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>LATITUDE</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[LATITUDE (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>LATITUDE</remote-alias>
+            <ordinal>38</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>LONGITUDE</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[LONGITUDE (airports.csv1)]</local-name>
+            <parent-name>[airports.csv1]</parent-name>
+            <remote-alias>LONGITUDE</remote-alias>
+            <ordinal>39</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>IATA_CODE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[IATA_CODE (airports.csv)]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>IATA_CODE</remote-alias>
+            <ordinal>40</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>AIRPORT</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[AIRPORT]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>AIRPORT</remote-alias>
+            <ordinal>41</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>CITY</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[CITY]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>CITY</remote-alias>
+            <ordinal>42</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>STATE</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[STATE]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>STATE</remote-alias>
+            <ordinal>43</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>COUNTRY</remote-name>
+            <remote-type>129</remote-type>
+            <local-name>[COUNTRY]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>COUNTRY</remote-alias>
+            <ordinal>44</ordinal>
+            <local-type>string</local-type>
+            <aggregation>Count</aggregation>
+            <scale>1</scale>
+            <width>1073741823</width>
+            <contains-null>true</contains-null>
+            <collation flag='0' name='LRU_RRU' />
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>LATITUDE</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[LATITUDE]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>LATITUDE</remote-alias>
+            <ordinal>45</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+          <metadata-record class='column'>
+            <remote-name>LONGITUDE</remote-name>
+            <remote-type>5</remote-type>
+            <local-name>[LONGITUDE]</local-name>
+            <parent-name>[airports.csv]</parent-name>
+            <remote-alias>LONGITUDE</remote-alias>
+            <ordinal>46</ordinal>
+            <local-type>real</local-type>
+            <aggregation>Sum</aggregation>
+            <contains-null>true</contains-null>
+            <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+          </metadata-record>
+        </metadata-records>
+      </connection>
+      <aliases enabled='yes' />
+      <column datatype='string' name='[CITY (airports.csv1)]' role='dimension' semantic-role='[City].[Name]' type='nominal' />
+      <column datatype='string' name='[CITY]' role='dimension' semantic-role='[City].[Name]' type='nominal' />
+      <column datatype='string' name='[COUNTRY (airports.csv1)]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+      <column datatype='string' name='[COUNTRY]' role='dimension' semantic-role='[Country].[ISO3166_2]' type='nominal' />
+      <column caption='Full Date' datatype='date' datatype-customized='true' name='[Calculation_529172996810002432]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='MAKEDATE([Year], [Month], [DAY])' />
+      </column>
+      <column caption='Arrival time formatted' datatype='real' name='[Calculation_529172996810956801]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='MAKETIME(&#13;&#10;    INT(FLOOR([Arrival Time] / 100)),  // Часы&#13;&#10;    INT([Arrival Time] % 100),        // Минуты&#13;&#10;    0                                 // Секунды&#13;&#10;) - DATETIME(&quot;1899-12-30 00:00:00&quot;)' />
+      </column>
+      <column caption='Arrival datetime' datatype='datetime' name='[Calculation_529172996812705796]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='DATETIME([Calculation_529172996810002432] + [Calculation_529172996810956801])' />
+      </column>
+      <column caption='Departure Time formatted' datatype='real' name='[Calculation_529172996813037573]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='MAKETIME(&#13;&#10;    INT(FLOOR([Departure Time] / 100)),  // Часы&#13;&#10;    INT([Departure Time] % 100),        // Минуты&#13;&#10;    0                                 // Секунды&#13;&#10;) - DATETIME(&quot;1899-12-30 00:00:00&quot;)' />
+      </column>
+      <column caption='Departure datetime' datatype='datetime' name='[Calculation_529172996813455366]' role='dimension' type='ordinal'>
+        <calculation class='tableau' formula='DATETIME([Calculation_529172996810002432] + [Calculation_529172996813037573])' />
+      </column>
+      <column caption='Airlaine_delay_not_null' datatype='integer' name='[Calculation_529172996826357767]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='ZN([Airline Delay])' />
+      </column>
+      <column datatype='integer' name='[DAY]' role='dimension' type='quantitative' />
+      <column aggregation='Sum' datatype='integer' name='[Diverted]' role='dimension' type='ordinal' />
+      <column datatype='integer' name='[Flight Number]' role='dimension' type='ordinal' />
+      <column aggregation='Avg' datatype='real' name='[LATITUDE (airports.csv1)]' role='measure' semantic-role='[Geographical].[Latitude]' type='quantitative' />
+      <column aggregation='Avg' datatype='real' name='[LATITUDE]' role='measure' semantic-role='[Geographical].[Latitude]' type='quantitative' />
+      <column aggregation='Avg' datatype='real' name='[LONGITUDE (airports.csv1)]' role='measure' semantic-role='[Geographical].[Longitude]' type='quantitative' />
+      <column aggregation='Avg' datatype='real' name='[LONGITUDE]' role='measure' semantic-role='[Geographical].[Longitude]' type='quantitative' />
+      <column datatype='integer' name='[Month]' role='dimension' type='quantitative' />
+      <column datatype='string' name='[STATE (airports.csv1)]' role='dimension' semantic-role='[State].[Name]' type='nominal' />
+      <column datatype='string' name='[STATE]' role='dimension' semantic-role='[State].[Name]' type='nominal' />
+      <column datatype='integer' name='[Year]' role='dimension' type='quantitative' />
+      <column caption='airlines.csv' datatype='table' name='[__tableau_internal_object_id__].[airlines.csv_F979DF793651482B984C0A6D14FE89BD]' role='measure' type='quantitative' />
+      <column caption='airports_origin.csv1' datatype='table' name='[__tableau_internal_object_id__].[airports.csv_012B5535EAD947AE82A6346883B28E3B]' role='measure' type='quantitative' />
+      <column caption='airports_destination.csv' datatype='table' name='[__tableau_internal_object_id__].[airports.csv_B009308EEFD14ED8A78064793281CA15]' role='measure' type='quantitative' />
+      <column caption='flights_light.csv' datatype='table' name='[__tableau_internal_object_id__].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' role='measure' type='quantitative' />
+      <drill-paths>
+        <drill-path name='COUNTRY, STATE, CITY'>
+          <field>[COUNTRY]</field>
+          <field>[STATE]</field>
+          <field>[CITY]</field>
+        </drill-path>
+      </drill-paths>
+      <extract _.fcp.VConnDownstreamExtractsWithWarnings.true...user-specific='false' count='-1' enabled='false' object-id='' units='records'>
+        <connection access_mode='readonly' author-locale='en_US' class='hyper' dbname='C:/Users/user/AppData/Local/Temp/TableauTemp/#TableauTemp_0u4wi9u10my8np199ytjb08mobha.hyper' default-settings='hyper' schema='Extract' sslmode='' tablename='Extract' update-time='01/27/2025 08:52:27 AM' username='tableau_internal_user'>
+          <relation type='collection'>
+            <relation name='airlines.csv_F979DF793651482B984C0A6D14FE89BD' table='[Extract].[airlines.csv_F979DF793651482B984C0A6D14FE89BD]' type='table' />
+            <relation name='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096' table='[Extract].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' type='table' />
+            <relation name='airports.csv_012B5535EAD947AE82A6346883B28E3B' table='[Extract].[airports.csv_012B5535EAD947AE82A6346883B28E3B]' type='table' />
+            <relation name='airports.csv_B009308EEFD14ED8A78064793281CA15' table='[Extract].[airports.csv_B009308EEFD14ED8A78064793281CA15]' type='table' />
+          </relation>
+          <cols>
+            <map key='[AIRLINE]' value='[airlines.csv_F979DF793651482B984C0A6D14FE89BD].[AIRLINE]' />
+            <map key='[AIRPORT (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[AIRPORT]' />
+            <map key='[AIRPORT]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[AIRPORT]' />
+            <map key='[Air System Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Air System Delay]' />
+            <map key='[Air Time]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Air Time]' />
+            <map key='[Airline Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Airline Delay]' />
+            <map key='[Airline]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Airline]' />
+            <map key='[Arrival Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Arrival Delay]' />
+            <map key='[Arrival Time]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Arrival Time]' />
+            <map key='[CITY (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[CITY]' />
+            <map key='[CITY]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[CITY]' />
+            <map key='[COUNTRY (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[COUNTRY]' />
+            <map key='[COUNTRY]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[COUNTRY]' />
+            <map key='[Cancellation Reason]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Cancellation Reason]' />
+            <map key='[Cancelled]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Cancelled]' />
+            <map key='[DAY]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[DAY]' />
+            <map key='[Day Of Week]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Day Of Week]' />
+            <map key='[Departure Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Departure Delay]' />
+            <map key='[Departure Time]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Departure Time]' />
+            <map key='[Destination Airport]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Destination Airport]' />
+            <map key='[Distance]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Distance]' />
+            <map key='[Diverted]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Diverted]' />
+            <map key='[Elapsed Time]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Elapsed Time]' />
+            <map key='[Flight Number]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Flight Number]' />
+            <map key='[IATA_CODE (airports.csv)]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[IATA_CODE]' />
+            <map key='[IATA_CODE (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[IATA_CODE]' />
+            <map key='[IATA_CODE]' value='[airlines.csv_F979DF793651482B984C0A6D14FE89BD].[IATA_CODE]' />
+            <map key='[LATITUDE (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[LATITUDE]' />
+            <map key='[LATITUDE]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[LATITUDE]' />
+            <map key='[LONGITUDE (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[LONGITUDE]' />
+            <map key='[LONGITUDE]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[LONGITUDE]' />
+            <map key='[Late Aircraft Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Late Aircraft Delay]' />
+            <map key='[Month]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Month]' />
+            <map key='[Origin Airport]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Origin Airport]' />
+            <map key='[STATE (airports.csv1)]' value='[airports.csv_012B5535EAD947AE82A6346883B28E3B].[STATE]' />
+            <map key='[STATE]' value='[airports.csv_B009308EEFD14ED8A78064793281CA15].[STATE]' />
+            <map key='[Scheduled Arrival]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Scheduled Arrival]' />
+            <map key='[Scheduled Departure]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Scheduled Departure]' />
+            <map key='[Scheduled Time]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Scheduled Time]' />
+            <map key='[Security Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Security Delay]' />
+            <map key='[Tail Number]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Tail Number]' />
+            <map key='[Taxi In]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Taxi In]' />
+            <map key='[Taxi Out]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Taxi Out]' />
+            <map key='[Weather Delay]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Weather Delay]' />
+            <map key='[Wheels Off]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Wheels Off]' />
+            <map key='[Wheels On]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Wheels On]' />
+            <map key='[Year]' value='[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096].[Year]' />
+          </cols>
+          <metadata-records>
+            <metadata-record class='column'>
+              <remote-name>IATA_CODE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[IATA_CODE]</local-name>
+              <parent-name>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</parent-name>
+              <remote-alias>IATA_CODE</remote-alias>
+              <ordinal>0</ordinal>
+              <family>airlines.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>14</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>AIRLINE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[AIRLINE]</local-name>
+              <parent-name>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</parent-name>
+              <remote-alias>AIRLINE</remote-alias>
+              <ordinal>1</ordinal>
+              <family>airlines.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>14</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airlines.csv_F979DF793651482B984C0A6D14FE89BD]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Airline</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Airline]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Airline</remote-alias>
+              <ordinal>2</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>14</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Cancellation Reason</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Cancellation Reason]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Cancellation Reason</remote-alias>
+              <ordinal>3</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>4</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>DAY</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[DAY]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>DAY</remote-alias>
+              <ordinal>4</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>31</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Day Of Week</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Day Of Week]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Day Of Week</remote-alias>
+              <ordinal>5</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>7</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Destination Airport</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Destination Airport]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Destination Airport</remote-alias>
+              <ordinal>6</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1377</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Flight Number</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Flight Number]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Flight Number</remote-alias>
+              <ordinal>7</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>25895</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Month</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Month]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Month</remote-alias>
+              <ordinal>8</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>12</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Origin Airport</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Origin Airport]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Origin Airport</remote-alias>
+              <ordinal>9</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1422</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Tail Number</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[Tail Number]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Tail Number</remote-alias>
+              <ordinal>10</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>22065</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Year</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Year]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Year</remote-alias>
+              <ordinal>11</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>1</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Air System Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Air System Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Air System Delay</remote-alias>
+              <ordinal>12</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>382</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Air Time</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Air Time]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Air Time</remote-alias>
+              <ordinal>13</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>1199</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Airline Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Airline Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Airline Delay</remote-alias>
+              <ordinal>14</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>449</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Arrival Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Arrival Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Arrival Delay</remote-alias>
+              <ordinal>15</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>823</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Arrival Time</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Arrival Time]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Arrival Time</remote-alias>
+              <ordinal>16</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>6072</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Cancelled</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Cancelled]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Cancelled</remote-alias>
+              <ordinal>17</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Departure Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Departure Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Departure Delay</remote-alias>
+              <ordinal>18</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>761</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Departure Time</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Departure Time]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Departure Time</remote-alias>
+              <ordinal>19</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>5983</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Distance</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Distance]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Distance</remote-alias>
+              <ordinal>20</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>4627</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Diverted</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Diverted]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Diverted</remote-alias>
+              <ordinal>21</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>10</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Elapsed Time</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Elapsed Time]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Elapsed Time</remote-alias>
+              <ordinal>22</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>1250</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Late Aircraft Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Late Aircraft Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Late Aircraft Delay</remote-alias>
+              <ordinal>23</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>634</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Scheduled Arrival</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Scheduled Arrival]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Scheduled Arrival</remote-alias>
+              <ordinal>24</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>5129</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Scheduled Departure</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Scheduled Departure]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Scheduled Departure</remote-alias>
+              <ordinal>25</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>3550</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Scheduled Time</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Scheduled Time]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Scheduled Time</remote-alias>
+              <ordinal>26</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>1301</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Security Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Security Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Security Delay</remote-alias>
+              <ordinal>27</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>3</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Taxi In</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Taxi In]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Taxi In</remote-alias>
+              <ordinal>28</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>103</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Taxi Out</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Taxi Out]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Taxi Out</remote-alias>
+              <ordinal>29</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>180</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Weather Delay</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Weather Delay]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Weather Delay</remote-alias>
+              <ordinal>30</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>2814</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Wheels Off</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Wheels Off]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Wheels Off</remote-alias>
+              <ordinal>31</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>6071</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>Wheels On</remote-name>
+              <remote-type>20</remote-type>
+              <local-name>[Wheels On]</local-name>
+              <parent-name>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</parent-name>
+              <remote-alias>Wheels On</remote-alias>
+              <ordinal>32</ordinal>
+              <family>flights_light.csv</family>
+              <local-type>integer</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>6047</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>IATA_CODE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[IATA_CODE (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>IATA_CODE</remote-alias>
+              <ordinal>33</ordinal>
+              <family>airports.csv1</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>322</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>AIRPORT</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[AIRPORT (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>AIRPORT</remote-alias>
+              <ordinal>34</ordinal>
+              <family>airports.csv1</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>322</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>CITY</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[CITY (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>CITY</remote-alias>
+              <ordinal>35</ordinal>
+              <family>airports.csv1</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>308</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>STATE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[STATE (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>STATE</remote-alias>
+              <ordinal>36</ordinal>
+              <family>airports.csv1</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>54</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>COUNTRY</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[COUNTRY (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>COUNTRY</remote-alias>
+              <ordinal>37</ordinal>
+              <family>airports.csv1</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>LATITUDE</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[LATITUDE (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>LATITUDE</remote-alias>
+              <ordinal>38</ordinal>
+              <family>airports.csv1</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>320</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>LONGITUDE</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[LONGITUDE (airports.csv1)]</local-name>
+              <parent-name>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</parent-name>
+              <remote-alias>LONGITUDE</remote-alias>
+              <ordinal>39</ordinal>
+              <family>airports.csv1</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>320</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[airports.csv_012B5535EAD947AE82A6346883B28E3B]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>IATA_CODE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[IATA_CODE (airports.csv)]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>IATA_CODE</remote-alias>
+              <ordinal>40</ordinal>
+              <family>airports.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>322</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>AIRPORT</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[AIRPORT]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>AIRPORT</remote-alias>
+              <ordinal>41</ordinal>
+              <family>airports.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>322</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>CITY</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[CITY]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>CITY</remote-alias>
+              <ordinal>42</ordinal>
+              <family>airports.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>308</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>STATE</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[STATE]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>STATE</remote-alias>
+              <ordinal>43</ordinal>
+              <family>airports.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>54</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>COUNTRY</remote-name>
+              <remote-type>129</remote-type>
+              <local-name>[COUNTRY]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>COUNTRY</remote-alias>
+              <ordinal>44</ordinal>
+              <family>airports.csv</family>
+              <local-type>string</local-type>
+              <aggregation>Count</aggregation>
+              <approx-count>1</approx-count>
+              <contains-null>true</contains-null>
+              <collation flag='0' name='LRU_RRU' />
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>LATITUDE</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[LATITUDE]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>LATITUDE</remote-alias>
+              <ordinal>45</ordinal>
+              <family>airports.csv</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>320</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+            <metadata-record class='column'>
+              <remote-name>LONGITUDE</remote-name>
+              <remote-type>5</remote-type>
+              <local-name>[LONGITUDE]</local-name>
+              <parent-name>[airports.csv_B009308EEFD14ED8A78064793281CA15]</parent-name>
+              <remote-alias>LONGITUDE</remote-alias>
+              <ordinal>46</ordinal>
+              <family>airports.csv</family>
+              <local-type>real</local-type>
+              <aggregation>Sum</aggregation>
+              <approx-count>320</approx-count>
+              <contains-null>true</contains-null>
+              <object-id>[airports.csv_B009308EEFD14ED8A78064793281CA15]</object-id>
+            </metadata-record>
+          </metadata-records>
+        </connection>
+      </extract>
+      <layout dim-ordering='alphabetic' measure-ordering='alphabetic' show-structure='true' />
+      <semantic-values>
+        <semantic-value key='[Country].[Name]' value='&quot;Russia&quot;' />
+      </semantic-values>
+      <date-options start-of-week='monday' />
+      <field-sort-info field-sort-order-type='custom-order'>
+        <field-sort-custom-order field='Airline' />
+        <field-sort-custom-order field='Cancellation Reason' />
+        <field-sort-custom-order field='DAY' />
+        <field-sort-custom-order field='Calculation_529172996810002432' />
+        <field-sort-custom-order field='Day Of Week' />
+        <field-sort-custom-order field='Destination Airport' />
+        <field-sort-custom-order field='Flight Number' />
+        <field-sort-custom-order field='Month' />
+        <field-sort-custom-order field='Origin Airport' />
+        <field-sort-custom-order field='Tail Number' />
+        <field-sort-custom-order field='Year' />
+        <field-sort-custom-order field='Air System Delay' />
+        <field-sort-custom-order field='Air Time' />
+        <field-sort-custom-order field='Airline Delay' />
+        <field-sort-custom-order field='Calculation_529172996826357767' />
+        <field-sort-custom-order field='Arrival Delay' />
+        <field-sort-custom-order field='Arrival Time' />
+        <field-sort-custom-order field='Calculation_529172996810956801' />
+        <field-sort-custom-order field='Calculation_529172996812705796' />
+        <field-sort-custom-order field='Cancelled' />
+        <field-sort-custom-order field='Departure Delay' />
+        <field-sort-custom-order field='Departure Time' />
+        <field-sort-custom-order field='Calculation_529172996813037573' />
+        <field-sort-custom-order field='Calculation_529172996813455366' />
+        <field-sort-custom-order field='Distance' />
+        <field-sort-custom-order field='Diverted' />
+        <field-sort-custom-order field='Elapsed Time' />
+        <field-sort-custom-order field='Late Aircraft Delay' />
+        <field-sort-custom-order field='Scheduled Arrival' />
+        <field-sort-custom-order field='Scheduled Departure' />
+        <field-sort-custom-order field='Scheduled Time' />
+        <field-sort-custom-order field='Security Delay' />
+        <field-sort-custom-order field='Taxi In' />
+        <field-sort-custom-order field='Taxi Out' />
+        <field-sort-custom-order field='Weather Delay' />
+        <field-sort-custom-order field='Wheels Off' />
+        <field-sort-custom-order field='Wheels On' />
+      </field-sort-info>
+      <object-graph>
+        <objects>
+          <object caption='airlines.csv' id='airlines.csv_F979DF793651482B984C0A6D14FE89BD'>
+            <properties context=''>
+              <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airlines.csv' table='[airlines#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+                  <column datatype='string' name='IATA_CODE' ordinal='0' />
+                  <column datatype='string' name='AIRLINE' ordinal='1' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='airlines.csv_F979DF793651482B984C0A6D14FE89BD' table='[Extract].[airlines.csv_F979DF793651482B984C0A6D14FE89BD]' type='table' />
+            </properties>
+          </object>
+          <object caption='airports_origin.csv1' id='airports.csv_012B5535EAD947AE82A6346883B28E3B'>
+            <properties context=''>
+              <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airports.csv1' table='[airports#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+                  <column datatype='string' name='IATA_CODE' ordinal='0' />
+                  <column datatype='string' name='AIRPORT' ordinal='1' />
+                  <column datatype='string' name='CITY' ordinal='2' />
+                  <column datatype='string' name='STATE' ordinal='3' />
+                  <column datatype='string' name='COUNTRY' ordinal='4' />
+                  <column datatype='real' name='LATITUDE' ordinal='5' />
+                  <column datatype='real' name='LONGITUDE' ordinal='6' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='airports.csv_012B5535EAD947AE82A6346883B28E3B' table='[Extract].[airports.csv_012B5535EAD947AE82A6346883B28E3B]' type='table' />
+            </properties>
+          </object>
+          <object caption='airports_destination.csv' id='airports.csv_B009308EEFD14ED8A78064793281CA15'>
+            <properties context=''>
+              <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='airports.csv' table='[airports#csv]' type='table'>
+                <columns character-set='UTF-8' header='yes' locale='ru_RU'>
+                  <column datatype='string' name='IATA_CODE' ordinal='0' />
+                  <column datatype='string' name='AIRPORT' ordinal='1' />
+                  <column datatype='string' name='CITY' ordinal='2' />
+                  <column datatype='string' name='STATE' ordinal='3' />
+                  <column datatype='string' name='COUNTRY' ordinal='4' />
+                  <column datatype='real' name='LATITUDE' ordinal='5' />
+                  <column datatype='real' name='LONGITUDE' ordinal='6' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='airports.csv_B009308EEFD14ED8A78064793281CA15' table='[Extract].[airports.csv_B009308EEFD14ED8A78064793281CA15]' type='table' />
+            </properties>
+          </object>
+          <object caption='flights_light.csv' id='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096'>
+            <properties context=''>
+              <relation connection='textscan.1d5pk3l0i0jc6o1ea58pq1mwrvjb' name='flights_light.csv' table='[flights_light#csv]' type='table'>
+                <columns character-set='UTF-16LE' header='yes' locale='ru_RU' separator='&#9;'>
+                  <column datatype='string' name='Airline' ordinal='0' />
+                  <column datatype='string' name='Cancellation Reason' ordinal='1' />
+                  <column datatype='integer' name='DAY' ordinal='2' />
+                  <column datatype='integer' name='Day Of Week' ordinal='3' />
+                  <column datatype='string' name='Destination Airport' ordinal='4' />
+                  <column datatype='integer' name='Flight Number' ordinal='5' />
+                  <column datatype='integer' name='Month' ordinal='6' />
+                  <column datatype='string' name='Origin Airport' ordinal='7' />
+                  <column datatype='string' name='Tail Number' ordinal='8' />
+                  <column datatype='integer' name='Year' ordinal='9' />
+                  <column datatype='integer' name='Air System Delay' ordinal='10' />
+                  <column datatype='integer' name='Air Time' ordinal='11' />
+                  <column datatype='integer' name='Airline Delay' ordinal='12' />
+                  <column datatype='integer' name='Arrival Delay' ordinal='13' />
+                  <column datatype='integer' name='Arrival Time' ordinal='14' />
+                  <column datatype='integer' name='Cancelled' ordinal='15' />
+                  <column datatype='integer' name='Departure Delay' ordinal='16' />
+                  <column datatype='integer' name='Departure Time' ordinal='17' />
+                  <column datatype='integer' name='Distance' ordinal='18' />
+                  <column datatype='integer' name='Diverted' ordinal='19' />
+                  <column datatype='integer' name='Elapsed Time' ordinal='20' />
+                  <column datatype='integer' name='Late Aircraft Delay' ordinal='21' />
+                  <column datatype='integer' name='Scheduled Arrival' ordinal='22' />
+                  <column datatype='integer' name='Scheduled Departure' ordinal='23' />
+                  <column datatype='integer' name='Scheduled Time' ordinal='24' />
+                  <column datatype='integer' name='Security Delay' ordinal='25' />
+                  <column datatype='integer' name='Taxi In' ordinal='26' />
+                  <column datatype='integer' name='Taxi Out' ordinal='27' />
+                  <column datatype='integer' name='Weather Delay' ordinal='28' />
+                  <column datatype='integer' name='Wheels Off' ordinal='29' />
+                  <column datatype='integer' name='Wheels On' ordinal='30' />
+                </columns>
+              </relation>
+            </properties>
+            <properties context='extract'>
+              <relation name='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096' table='[Extract].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' type='table' />
+            </properties>
+          </object>
+        </objects>
+        <relationships>
+          <relationship>
+            <expression op='='>
+              <expression op='[Origin Airport]' />
+              <expression op='[IATA_CODE (airports.csv1)]' />
+            </expression>
+            <first-end-point object-id='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096' />
+            <second-end-point object-id='airports.csv_012B5535EAD947AE82A6346883B28E3B' />
+          </relationship>
+          <relationship>
+            <expression op='='>
+              <expression op='[Destination Airport]' />
+              <expression op='[IATA_CODE (airports.csv)]' />
+            </expression>
+            <first-end-point object-id='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096' />
+            <second-end-point object-id='airports.csv_B009308EEFD14ED8A78064793281CA15' />
+          </relationship>
+          <relationship>
+            <expression op='='>
+              <expression op='[IATA_CODE]' />
+              <expression op='[Airline]' />
+            </expression>
+            <first-end-point object-id='airlines.csv_F979DF793651482B984C0A6D14FE89BD' />
+            <second-end-point object-id='flights_light.csv_E328D2C9D76B4F5291B056A9631D8096' />
+          </relationship>
+        </relationships>
+      </object-graph>
+    </datasource>
+  </datasources>
+  <worksheets>
+    <worksheet name='Sheet 1'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='airlines+' name='federated.11dwwd41r8fc4q1451uiy0099rre' />
+          </datasources>
+          <datasource-dependencies datasource='federated.11dwwd41r8fc4q1451uiy0099rre'>
+            <column datatype='string' name='[Cancellation Reason]' role='dimension' type='nominal' />
+            <column-instance column='[__tableau_internal_object_id__].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:flights_light.csv_E328D2C9D76B4F5291B056A9631D8096:qk]' pivot='key' type='quantitative' />
+            <column caption='flights_light.csv' datatype='table' name='[__tableau_internal_object_id__].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' role='measure' type='quantitative' />
+            <column-instance column='[Cancellation Reason]' derivation='None' name='[none:Cancellation Reason:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.11dwwd41r8fc4q1451uiy0099rre].[none:Cancellation Reason:nk]</rows>
+        <cols>[federated.11dwwd41r8fc4q1451uiy0099rre].[__tableau_internal_object_id__].[cnt:flights_light.csv_E328D2C9D76B4F5291B056A9631D8096:qk]</cols>
+      </table>
+      <simple-id uuid='{072E35E8-DDD3-43E6-B794-EAB577DC897E}' />
+    </worksheet>
+    <worksheet name='Sheet 2'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='airlines+' name='federated.11dwwd41r8fc4q1451uiy0099rre' />
+          </datasources>
+          <datasource-dependencies datasource='federated.11dwwd41r8fc4q1451uiy0099rre'>
+            <column aggregation='Sum' datatype='integer' name='[Diverted]' role='dimension' type='ordinal' />
+            <column-instance column='[__tableau_internal_object_id__].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' derivation='Count' name='[__tableau_internal_object_id__].[cnt:flights_light.csv_E328D2C9D76B4F5291B056A9631D8096:qk]' pivot='key' type='quantitative' />
+            <column caption='flights_light.csv' datatype='table' name='[__tableau_internal_object_id__].[flights_light.csv_E328D2C9D76B4F5291B056A9631D8096]' role='measure' type='quantitative' />
+            <column-instance column='[Diverted]' derivation='None' name='[none:Diverted:ok]' pivot='key' type='ordinal' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows>[federated.11dwwd41r8fc4q1451uiy0099rre].[none:Diverted:ok]</rows>
+        <cols>[federated.11dwwd41r8fc4q1451uiy0099rre].[__tableau_internal_object_id__].[cnt:flights_light.csv_E328D2C9D76B4F5291B056A9631D8096:qk]</cols>
+      </table>
+      <simple-id uuid='{87E5AF40-4F67-4A85-A409-A45990735B66}' />
+    </worksheet>
+  </worksheets>
+  <windows saved-dpi-scale-factor='1.25' source-height='37'>
+    <window class='worksheet' name='Sheet 1'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{F0293FD5-0575-41D1-9E30-D6A3675DEE9A}' />
+    </window>
+    <window class='worksheet' maximized='true' name='Sheet 2'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{F7327C4A-59F6-452B-AADE-B3E5E4C278ED}' />
+    </window>
+  </windows>
+</workbook>
