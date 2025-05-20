@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Test Simulation: Button Color</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Светлая тема */
+            --background-color: #f5f7fa;
+            --text-color: #333;
+            --label-color: #555;
+            --container-bg: #ffffff;
+            --border-color: #ddd;
+            --button-bg: #6c63ff;
+            --button-hover-bg: #554bff;
+            --button-text: #fff;
+            --canvas-bg: #fff;
+            --canvas-border: #ddd;
+            --table-header-bg: #6c63ff;
+            --table-header-text: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --tooltip-bg: #333;
+            --tooltip-text: #fff;
+            --s-color: #FF5555; /* Specific */
+            --m-color: #55AA55; /* Measurable */
+            --a-color: #5555FF; /* Achievable */
+            --r-color: #FFAA00; /* Relevant */
+            --t-color: #AA55AA; /* Time-bound */
+            --winner-color: #28a745; /* Цвет для победителя */
+        }
+
+        [data-theme="dark"] {
+            /* Темная тема */
+            --background-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --label-color: #a0a0a0;
+            --container-bg: #2a2a2a;
+            --border-color: #444;
+            --button-bg: #7b73ff;
+            --button-hover-bg: #665bff;
+            --button-text: #fff;
+            --canvas-bg: #2a2a2a;
+            --canvas-border: #444;
+            --table-header-bg: #7b73ff;
+            --table-header-text: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --tooltip-bg: #555;
+            --tooltip-text: #e0e0e0;
+            --s-color: #FF8888;
+            --m-color: #88CC88;
+            --a-color: #8888FF;
+            --r-color: #FFCC55;
+            --t-color: #CC88CC;
+            --winner-color: #34c759;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            margin: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .hypothesis {
+            background-color: var(--container-bg);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .hypothesis h2 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            color: var(--label-color);
+            display: inline;
+        }
+        .hypothesis p {
+            margin: 0;
+            font-size: 14px;
+            display: inline;
+        }
+        .s { color: var(--s-color); font-weight: bold; }
+        .m { color: var(--m-color); font-weight: bold; }
+        .a { color: var(--a-color); font-weight: bold; }
+        .r { color: var(--r-color); font-weight: bold; }
+        .t { color: var(--t-color); font-weight: bold; }
+        .controls {
+            background-color: var(--container-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        .control-group h3 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+            color: var(--label-color);
+        }
+        .control-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: baseline;
+        }
+        .control-item {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 3px;
+            position: relative;
+            width: 200px;
+        }
+        .control-item label {
+            white-space: nowrap;
+        }
+        .control-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        label {
+            font-weight: bold;
+            color: var(--label-color);
+            font-size: 12px;
+        }
+        input[type="number"], input[type="checkbox"], select, button {
+            padding: 5px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        input[type="number"] {
+            width: 60px;
+        }
+        select {
+            width: 120px;
+        }
+        input[type="number"]:focus, select:focus, button:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 5px rgba(108, 99, 255, 0.3);
+        }
+        button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: var(--button-hover-bg);
+        }
+        #simulationCanvas, #timeSeriesCanvas {
+            width: 100%;
+            border: 1px solid var(--canvas-border);
+            border-radius: 10px;
+            background-color: var(--canvas-bg);
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+        }
+        .slider-container {
+            margin-top: 10px;
+            background-color: var(--container-bg);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        #visitorSlider {
+            width: 100%;
+            margin-top: 5px;
+        }
+        #visitorInput {
+            width: 80px;
+            margin-left: 5px;
+        }
+        #visitorInfo {
+            margin-top: 5px;
+            color: var(--label-color);
+            font-size: 12px;
+        }
+        #stats {
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            font-size: 12px;
+        }
+        th, td {
+            padding: 8px 10px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+        }
+        th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-weight: bold;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .winner {
+            color: var(--winner-color);
+            font-weight: bold;
+        }
+        .stats-extra {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: var(--container-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            font-size: 12px;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .theme-toggle label {
+            font-size: 12px;
+            line-height: 15px;
+        }
+        .theme-toggle input[type="checkbox"] {
+            appearance: none;
+            width: 30px;
+            height: 15px;
+            background-color: var(--border-color);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .theme-toggle input[type="checkbox"]:checked {
+            background-color: var(--button-bg);
+        }
+        .theme-toggle input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--container-bg);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 1.5px;
+            transition: transform 0.3s ease;
+        }
+        .theme-toggle input[type="checkbox"]:checked::before {
+            transform: translate(15px, -50%);
+        }
+        .tooltip {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 14px;
+            height: 14px;
+            line-height: 14px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            font-size: 10px;
+            color: var(--label-color);
+            cursor: pointer;
+            margin-left: 3px;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 180px;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: left;
+            border-radius: 5px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -90px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 11px;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="hypothesis">
+        <h2>Гипотеза по <span class="s">S</span>.<span class="m">M</span>.<span class="a">A</span>.<span class="r">R</span>.<span class="t">T</span></h2>
+        <p id="hypothesisText">: <span class="s">определить</span>, увеличит ли изменение цвета кнопки с синего (<span class="m">15%</span>) на красный (<span class="m">50%</span>) конверсию, что <span class="a">достижимо</span> на основе тестов, <span class="r">релевантно</span> для дохода, и завершится за <span class="t">минимальный размер выборки</span>.</p>
+    </div>
+    <div class="controls">
+        <div class="theme-toggle">
+            <label>Темная тема</label>
+            <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+        </div>
+        <div class="control-group">
+            <h3>Параметры конверсии</h3>
+            <div class="control-items">
+                <div class="control-item">
+                    <label>Базовая A (%): </label>
+                    <input type="number" id="baseA" min="0" max="100" value="15" oninput="updateHypothesis(); calculateSampleSize(); draw();">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Ожидаемый % пользователей, кликнувших на синюю кнопку.</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Ожидаемая B (%): </label>
+                    <input type="number" id="baseB" min="0" max="100" value="50" oninput="updateHypothesis(); calculateSampleSize(); draw();">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Предполагаемый % пользователей, кликнувших на красную кнопку.</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Исход B: </label>
+                    <select id="outcomeB" onchange="updateRealConversionB(); draw();">
+                        <option value="worse">B хуже A</option>
+                        <option value="better">B лучше A</option>
+                        <option value="same">B такая же, как A</option>
+                        <option value="expected">B соответствует ожиданиям</option>
+                    </select>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Реальный исход для группы B в симуляции.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <h3>Параметры теста и моделирование данных</h3>
+            <div class="control-items">
+                <div class="control-item">
+                    <label>Мощность (1-β, %): </label>
+                    <input type="number" id="power" min="0" max="100" value="80" oninput="calculateSampleSize(); draw();">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Вероятность обнаружить различие, если оно есть (обычно 80%).</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Значимость (α, %): </label>
+                    <input type="number" id="alpha" min="0" max="100" value="5" oninput="calculateSampleSize(); draw();">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Вероятность ложноположительного результата (обычно 5%).</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Шум (%): </label>
+                    <input type="number" id="noiseLevel" min="0" max="100" value="0">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Вероятность случайного изменения конверсии.</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Выбросы (%): </label>
+                    <input type="number" id="outlierProbability" min="0" max="100" value="0">
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Вероятность аномалий (0% или 100% конверсия).</span>
+                    </div>
+                </div>
+                <div class="control-item">
+                    <label>Режим графика: </label>
+                    <select id="chartMode" onchange="draw();">
+                        <option value="histogram">Гистограмма + нормальные кривые</option>
+                        <option value="violin">Violin Plot</option>
+                    </select>
+                    <div class="tooltip">?
+                        <span class="tooltiptext">Выберите тип визуализации распределений.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="control-buttons">
+            <button onclick="startSimulation()">Старт</button>
+            <button onclick="speedUp()">Ускорить</button>
+            <button onclick="slowDown()">Замедлить</button>
+            <button onclick="finishSimulation()">Довести до конца</button>
+        </div>
+    </div>
+    <canvas id="simulationCanvas"></canvas>
+    <canvas id="timeSeriesCanvas"></canvas>
+    <div class="slider-container">
+        <div>
+            <span id="sliderLabel">Посетитель: 0</span>
+            <input type="number" id="visitorInput" min="0" value="0" oninput="updateVisitorFromInput()">
+        </div>
+        <input type="range" id="visitorSlider" min="0" max="0" value="0" oninput="updateVisitorView()">
+        <div id="visitorInfo"></div>
+    </div>
+    <div id="stats"></div>
+
+    <script>
+        const simulationCanvas = document.getElementById('simulationCanvas');
+        const timeSeriesCanvas = document.getElementById('timeSeriesCanvas');
+        const statsDiv = document.getElementById('stats');
+        const visitorSlider = document.getElementById('visitorSlider');
+        const visitorInput = document.getElementById('visitorInput');
+        const visitorInfoDiv = document.getElementById('visitorInfo');
+        const sliderLabel = document.getElementById('sliderLabel');
+        const themeToggle = document.getElementById('themeToggle');
+        const hypothesisText = document.getElementById('hypothesisText');
+        const ctx = simulationCanvas.getContext('2d');
+        const timeSeriesCtx = timeSeriesCanvas.getContext('2d');
+        let groups = {};
+        let users = [];
+        let allUsers = [];
+        let intervalId = null;
+        let speed = 100;
+        let speedFactor = 1;
+        const bins = 50;
+        const MDE = 2;
+        let MIN_SAMPLE_SIZE = 29;
+        let simulationStep = 0;
+        let realConversionB = 0;
+
+        // Адаптивный размер канвасов
+        function resizeCanvases() {
+            const parentWidth = window.innerWidth - 40;
+            simulationCanvas.width = parentWidth;
+            simulationCanvas.height = parentWidth / 2 + 50;
+            timeSeriesCanvas.width = parentWidth;
+            timeSeriesCanvas.height = parentWidth / 4; // Меньшая высота для временного графика
+            draw();
+        }
+
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        // Сохранение и загрузка темы
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.checked = savedTheme === 'dark';
+        }
+
+        function toggleTheme() {
+            const newTheme = themeToggle.checked ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            draw();
+        }
+
+        // Динамическое обновление гипотезы
+        function updateHypothesis() {
+            const baseA = parseFloat(document.getElementById('baseA').value);
+            const baseB = parseFloat(document.getElementById('baseB').value);
+            hypothesisText.innerHTML = `: <span class="s">определить</span>, увеличит ли изменение цвета кнопки с синего (<span class="m">${baseA}%</span>) на красный (<span class="m">${baseB}%</span>) конверсию, что <span class="a">достижимо</span> на основе тестов, <span class="r">релевантно</span> для дохода, и завершится за <span class="t">минимальный размер выборки</span>.`;
+        }
+
+        // Генерация реальной конверсии для группы B
+        function updateRealConversionB() {
+            const baseA = parseFloat(document.getElementById('baseA').value) / 100;
+            const baseB = parseFloat(document.getElementById('baseB').value) / 100;
+            const outcomeB = document.getElementById('outcomeB').value;
+            let variation = (Math.random() - 0.5) * 0.1; // Случайная вариация ±5%
+
+            if (outcomeB === 'worse') {
+                realConversionB = Math.max(0, baseA - 0.05 + variation);
+            } else if (outcomeB === 'better') {
+                realConversionB = Math.min(1, baseA + 0.15 + variation);
+            } else if (outcomeB === 'same') {
+                realConversionB = baseA + variation;
+            } else if (outcomeB === 'expected') {
+                realConversionB = Math.min(1, Math.max(0, baseB + variation));
+            }
+
+            groups['B'].realRate = realConversionB;
+        }
+
+        // Инициализация групп
+        function initGroups() {
+            const baseA = parseFloat(document.getElementById('baseA').value) / 100;
+            groups = {
+                'A': { baseRate: baseA, conversions: 0, total: 0, means: [], histogram: new Array(bins).fill(0) },
+                'B': { baseRate: parseFloat(document.getElementById('baseB').value) / 100, realRate: 0, conversions: 0, total: 0, means: [], histogram: new Array(bins).fill(0) }
+            };
+            updateRealConversionB();
+            users = [];
+            allUsers = [];
+            simulationStep = 0;
+            visitorSlider.max = 0;
+            visitorSlider.value = 0;
+            visitorInput.max = 0;
+            visitorInput.value = 0;
+            sliderLabel.textContent = 'Посетитель: 0';
+            calculateSampleSize();
+        }
+
+        // Генерация конверсии с учетом шума и выбросов
+        function generateConversion(group) {
+            const noiseLevel = parseFloat(document.getElementById('noiseLevel').value) / 100;
+            const outlierProbability = parseFloat(document.getElementById('outlierProbability').value) / 100;
+
+            if (Math.random() < outlierProbability) {
+                return Math.random() < 0.5 ? 0 : 1;
+            }
+
+            const rate = group === 'A' ? groups[group].baseRate : groups[group].realRate;
+            let conversion = Math.random() < rate ? 1 : 0;
+            if (Math.random() < noiseLevel) {
+                conversion = conversion === 1 ? 0 : 1;
+            }
+
+            return conversion;
+        }
+
+        // Добавление пользователя
+        function addUser() {
+            if (groups['A'].total >= MIN_SAMPLE_SIZE && groups['B'].total >= MIN_SAMPLE_SIZE) {
+                clearInterval(intervalId);
+                intervalId = null;
+                return;
+            }
+
+            const group = Math.random() < 0.5 ? 'A' : 'B';
+            const conversion = generateConversion(group);
+            groups[group].total++;
+            if (conversion) groups[group].conversions++;
+            const mean = groups[group].total > 0 ? (groups[group].conversions / groups[group].total) * 100 : 0;
+            groups[group].means.push(mean);
+            const binIndex = Math.min(Math.floor(mean / (100 / bins)), bins - 1);
+            groups[group].histogram[binIndex]++;
+            const user = { 
+                group, 
+                conversion, 
+                x: Math.random() * (simulationCanvas.width * 0.3),
+                y: simulationCanvas.height, 
+                alpha: 0, 
+                yHistory: [simulationCanvas.height]
+            };
+            users.push(user);
+            allUsers.push(user);
+
+            users.forEach(user => {
+                user.y -= 1;
+                user.yHistory.push(user.y);
+            });
+
+            simulationStep++;
+            visitorSlider.max = allUsers.length;
+            visitorSlider.value = allUsers.length;
+            visitorInput.max = allUsers.length;
+            visitorInput.value = allUsers.length;
+            updateVisitorView();
+        }
+
+        // Нормальная плотность распределения
+        function normalDensity(x, mean, std) {
+            if (std === 0) return 0;
+            return (1 / (std * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * ((x - mean) / std) ** 2);
+        }
+
+        // Расчет p-value (z-тест для пропорций, двусторонний)
+        function calculatePValue(tempGroups) {
+            const pA = tempGroups['A'].conversions / tempGroups['A'].total;
+            const pB = tempGroups['B'].conversions / tempGroups['B'].total;
+            const nA = tempGroups['A'].total;
+            const nB = tempGroups['B'].total;
+
+            if (nA === 0 || nB === 0) return 1;
+
+            const pPooled = (tempGroups['A'].conversions + tempGroups['B'].conversions) / (nA + nB);
+            const se = Math.sqrt(pPooled * (1 - pPooled) * (1 / nA + 1 / nB));
+            if (se === 0) return 1;
+            const z = Math.abs((pB - pA) / se);
+            const pValue = 2 * (1 - (0.5 * (1 + erf(z / Math.sqrt(2)))));
+            return pValue;
+        }
+
+        // Функция ошибки (для расчета p-value)
+        function erf(x) {
+            const a1 = 0.254829592;
+            const a2 = -0.284496736;
+            const a3 = 1.421413741;
+            const a4 = -1.453152027;
+            const a5 = 1.061405429;
+            const p = 0.3275911;
+            const sign = x < 0 ? -1 : 1;
+            x = Math.abs(x);
+            const t = 1 / (1 + p * x);
+            const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+            return sign * y;
+        }
+
+        // Получение z-значения для заданного уровня значимости или мощности
+        function getZScore(p) {
+            if (p <= 0 || p >= 1) return 0;
+
+            const a1 = -39.69683028665376;
+            const a2 = 220.9460984245205;
+            const a3 = -275.9285104469687;
+            const a4 = 138.3577518672690;
+            const a5 = -30.66479806614716;
+            const a6 = 2.506628277459239;
+            const b1 = -54.47609879822406;
+            const b2 = 161.5858368580409;
+            const b3 = -155.6989798598866;
+            const b4 = 66.80131188771972;
+            const b5 = -13.28068155288572;
+            const c1 = -7.784894002430293e-3;
+            const c2 = -0.3223964580411365;
+            const c3 = -2.400758277161838;
+            const c4 = -2.549732539343734;
+            const c5 = 4.374664141464968;
+            const c6 = 2.938163982698783;
+            const d1 = 7.784695709041462e-3;
+            const d2 = 0.3224671290700398;
+            const d3 = 2.445134137142996;
+            const d4 = 3.754408661907416;
+
+            const p_low = 0.02425;
+            const p_high = 1 - p_low;
+
+            let z;
+            if (p < p_low) {
+                const q = Math.sqrt(-2 * Math.log(p));
+                z = (((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
+                    ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+            } else if (p <= p_high) {
+                const q = p - 0.5;
+                const r = q * q;
+                z = (((((a1 * r + a2) * r + a3) * r + a4) * r + a5) * r + a6) * q /
+                    (((((b1 * r + b2) * r + b3) * r + b4) * r + b5) * r + 1);
+            } else {
+                const q = Math.sqrt(-2 * Math.log(1 - p));
+                z = -(((((c1 * q + c2) * q + c3) * q + c4) * q + c5) * q + c6) /
+                    ((((d1 * q + d2) * q + d3) * q + d4) * q + 1);
+            }
+            return z;
+        }
+
+        // Расчет доверительного интервала (95%)
+        function calculateConfidenceInterval(conversions, total) {
+            if (total === 0) return { lower: 0, upper: 0 };
+            const p = conversions / total;
+            const z = getZScore(0.975);
+            const se = Math.sqrt(p * (1 - p) / total);
+            const margin = z * se;
+            const lower = Math.max(0, p - margin) * 100;
+            const upper = Math.min(1, p + margin) * 100;
+            return { lower: lower.toFixed(2), upper: upper.toFixed(2) };
+        }
+
+        // Динамический пересчет размера выборки (двусторонний тест)
+        function calculateSampleSize() {
+            const pA = parseFloat(document.getElementById('baseA').value) / 100;
+            const pB = parseFloat(document.getElementById('baseB').value) / 100;
+            const alpha = parseFloat(document.getElementById('alpha').value) / 100;
+            const power = parseFloat(document.getElementById('power').value) / 100;
+
+            if (isNaN(pA) || isNaN(pB) || isNaN(alpha) || isNaN(power) || pA <= 0 || pB <= 0 || alpha <= 0 || power <= 0 || pA >= 1 || pB >= 1 || alpha >= 1 || power >= 1) {
+                MIN_SAMPLE_SIZE = 29;
+                return;
+            }
+
+            const zAlpha = getZScore(1 - alpha / 2);
+            const zBeta = getZScore(power);
+            const pPooled = (pA + pB) / 2;
+            const delta = Math.abs(pB - pA);
+            if (delta === 0) {
+                MIN_SAMPLE_SIZE = Infinity;
+                return;
+            }
+            const variance = pPooled * (1 - pPooled);
+            const n = ((zAlpha + zBeta) ** 2 * 2 * variance) / (delta ** 2);
+            MIN_SAMPLE_SIZE = Math.ceil(n);
+        }
+
+        // Обновление отображения при вводе номера посетителя
+        function updateVisitorFromInput() {
+            let value = parseInt(visitorInput.value);
+            if (isNaN(value) || value < 0) value = 0;
+            if (value > allUsers.length) value = allUsers.length;
+            visitorSlider.value = value;
+            updateVisitorView();
+        }
+
+        // Обновление отображения в зависимости от выбранного посетителя
+        function updateVisitorView() {
+            const selectedVisitorIndex = parseInt(visitorSlider.value);
+            sliderLabel.textContent = `Посетитель: ${selectedVisitorIndex}`;
+            visitorInput.value = selectedVisitorIndex;
+            draw(selectedVisitorIndex);
+        }
+
+        // Отрисовка основного графика
+        function draw(selectedVisitorIndex = allUsers.length) {
+            ctx.clearRect(0, 0, simulationCanvas.width, simulationCanvas.height);
+
+            const tempGroups = {
+                'A': { conversions: 0, total: 0, means: [], histogram: new Array(bins).fill(0) },
+                'B': { conversions: 0, total: 0, means: [], histogram: new Array(bins).fill(0) }
+            };
+
+            for (let i = 0; i < selectedVisitorIndex; i++) {
+                const user = allUsers[i];
+                const group = user.group;
+                tempGroups[group].total++;
+                if (user.conversion) tempGroups[group].conversions++;
+                const mean = tempGroups[group].total > 0 ? (tempGroups[group].conversions / tempGroups[group].total) * 100 : 0;
+                tempGroups[group].means.push(mean);
+                const binIndex = Math.min(Math.floor(mean / (100 / bins)), bins - 1);
+                tempGroups[group].histogram[binIndex]++;
+            }
+
+            for (let i = 0; i < Math.min(selectedVisitorIndex, allUsers.length); i++) {
+                const user = allUsers[i];
+                const historyIndex = Math.min(selectedVisitorIndex - i - 1, user.yHistory.length - 1);
+                user.y = user.yHistory[historyIndex];
+                user.alpha = Math.min(Math.max(i < selectedVisitorIndex ? user.alpha + 0.1 : user.alpha - 0.1, 0), 1);
+
+                if (user.alpha > 0 && user.y >= 0 && user.y <= simulationCanvas.height) {
+                    ctx.beginPath();
+                    const isSelected = i === selectedVisitorIndex - 1;
+                    const radius = isSelected ? 8 : 5;
+                    ctx.arc(user.x, user.y, radius, 0, Math.PI * 2);
+                    const colors = { 'A': '#66CC66', 'B': '#FF6666' };
+                    const highlightColor = 'purple';
+                    ctx.strokeStyle = isSelected ? highlightColor : colors[user.group];
+                    ctx.fillStyle = user.conversion ? (isSelected ? highlightColor : colors[user.group]) : 'transparent';
+                    ctx.globalAlpha = user.alpha;
+                    ctx.lineWidth = isSelected ? 3 : 1;
+                    ctx.stroke();
+                    if (user.conversion) ctx.fill();
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            if (selectedVisitorIndex > 0 && selectedVisitorIndex <= allUsers.length) {
+                const selectedUser = allUsers[selectedVisitorIndex - 1];
+                visitorInfoDiv.innerHTML = `Посетитель ${selectedVisitorIndex}: Группа ${selectedUser.group}, Конверсия: ${selectedUser.conversion ? 'Да' : 'Нет'}`;
+            } else {
+                visitorInfoDiv.innerHTML = 'Выберите посетителя с помощью слайдера';
+            }
+
+            const chartMode = document.getElementById('chartMode').value;
+            if (chartMode === 'histogram') {
+                drawHistogram(tempGroups);
+            } else if (chartMode === 'violin') {
+                drawViolinPlot(tempGroups);
+            }
+
+            // Отрисовка временного графика
+            drawTimeSeries(tempGroups, selectedVisitorIndex);
+
+            updateStats(tempGroups);
+        }
+
+        // Отрисовка гистограммы с нормальными кривыми
+        function drawHistogram(tempGroups) {
+            const graphX = simulationCanvas.width * 0.3;
+            const graphWidth = simulationCanvas.width * 0.65;
+            const graphHeight = simulationCanvas.height - 150;
+            const graphY = simulationCanvas.height - graphHeight - 50;
+            const barWidth = graphWidth / bins;
+
+            const meanA = tempGroups['A'].total > 0 ? (tempGroups['A'].conversions / tempGroups['A'].total) * 100 : 0;
+            const meanB = tempGroups['B'].total > 0 ? (tempGroups['B'].conversions / tempGroups['B'].total) * 100 : 0;
+            const meanAX = graphX + (meanA / 100) * graphWidth;
+            const meanBX = graphX + (meanB / 100) * graphWidth;
+
+            const ciA = calculateConfidenceInterval(tempGroups['A'].conversions, tempGroups['A'].total);
+            const ciB = calculateConfidenceInterval(tempGroups['B'].conversions, tempGroups['B'].total);
+            const ciAXStart = graphX + (ciA.lower / 100) * graphWidth;
+            const ciAXEnd = graphX + (ciA.upper / 100) * graphWidth;
+            const ciBXStart = graphX + (ciB.lower / 100) * graphWidth;
+            const ciBXEnd = graphX + (ciB.upper / 100) * graphWidth;
+
+            let maxFreqPercent = 0;
+            Object.keys(tempGroups).forEach(group => {
+                const hist = tempGroups[group].histogram;
+                const total = tempGroups[group].total || 1;
+                hist.forEach(freq => {
+                    maxFreqPercent = Math.max(maxFreqPercent, (freq / total) * 100);
+                });
+            });
+            maxFreqPercent = Math.max(maxFreqPercent, 1);
+
+            const histograms = {
+                'A': new Array(bins).fill(0),
+                'B': new Array(bins).fill(0)
+            };
+            Object.keys(tempGroups).forEach(group => {
+                const hist = tempGroups[group].histogram;
+                const total = tempGroups[group].total || 1;
+                hist.forEach((freq, binIndex) => {
+                    histograms[group][binIndex] = (freq / total) * 100;
+                });
+            });
+
+            ['A', 'B'].forEach((group, groupIndex) => {
+                const colors = ['rgba(102, 204, 102, 0.8)', 'rgba(255, 102, 102, 0.8)'];
+                histograms[group].forEach((freqPercent, binIndex) => {
+                    const height = (freqPercent / maxFreqPercent) * graphHeight;
+                    ctx.fillStyle = colors[groupIndex];
+                    ctx.fillRect(graphX + binIndex * barWidth, graphY + graphHeight - height, barWidth - 1, height);
+                });
+            });
+
+            Object.keys(tempGroups).forEach((group, groupIndex) => {
+                const means = tempGroups[group].means;
+                if (means.length > 10) {
+                    const mean = group === 'A' ? meanA : meanB;
+                    const meanX = group === 'A' ? meanAX : meanBX;
+                    const std = Math.sqrt(means.reduce((a, b) => a + (b - mean) ** 2, 0) / (means.length - 1)) || 1;
+                    const alpha = parseFloat(document.getElementById('alpha').value) / 100;
+                    const zAlpha = getZScore(1 - alpha / 2);
+                    const ci = zAlpha * std / Math.sqrt(means.length);
+                    const ciStart = Math.max(0, mean - ci);
+                    const ciEnd = Math.min(100, mean + ci);
+
+                    ctx.beginPath();
+                    const ciColors = ['rgba(0, 100, 0, 0.5)', 'rgba(139, 0, 0, 0.5)'];
+                    for (let x = ciStart; x <= ciEnd; x += 0.1) {
+                        const y = normalDensity(x, mean, std) * graphHeight * (maxFreqPercent / 100 / normalDensity(mean, mean, std));
+                        const canvasX = graphX + (x / 100) * graphWidth;
+                        const canvasY = graphY + graphHeight - y;
+                        if (x === ciStart) ctx.moveTo(canvasX, graphY + graphHeight);
+                        ctx.lineTo(canvasX, canvasY);
+                    }
+                    ctx.lineTo(graphX + (ciEnd / 100) * graphWidth, graphY + graphHeight);
+                    ctx.closePath();
+                    ctx.fillStyle = ciColors[groupIndex];
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.strokeStyle = ['#66CC66', '#FF6666'][groupIndex];
+                    for (let x = 0; x <= 100; x += 1) {
+                        const y = normalDensity(x, mean, std) * graphHeight * (maxFreqPercent / 100 / normalDensity(mean, mean, std));
+                        const canvasX = graphX + (x / 100) * graphWidth;
+                        const canvasY = graphY + graphHeight - y;
+                        if (x === 0) ctx.moveTo(canvasX, canvasY);
+                        else ctx.lineTo(canvasX, canvasY);
+                    }
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.strokeStyle = ['#66CC66', '#FF6666'][groupIndex];
+                    ctx.moveTo(meanX, graphY + graphHeight);
+                    ctx.lineTo(meanX, graphY);
+                    ctx.stroke();
+
+                    const ciStartX = group === 'A' ? ciAXStart : ciBXStart;
+                    const ciEndX = group === 'A' ? ciAXEnd : ciBXEnd;
+                    const ciY = graphY - 10 - groupIndex * 30;
+                    ctx.beginPath();
+                    ctx.strokeStyle = ['#66CC66', '#FF6666'][groupIndex];
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(ciStartX, ciY);
+                    ctx.lineTo(ciEndX, ciY);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(ciStartX, ciY - 5);
+                    ctx.lineTo(ciStartX, ciY + 5);
+                    ctx.moveTo(ciEndX, ciY - 5);
+                    ctx.lineTo(ciEndX, ciY + 5);
+                    ctx.stroke();
+                    ctx.lineWidth = 1;
+
+                    ctx.font = 'bold 12px Roboto Mono';
+                    ctx.fillStyle = ['#66CC66', '#FF6666'][groupIndex];
+                    const ciText = group === 'A' ? `${ciA.lower}% - ${ciA.upper}%` : `${ciB.lower}% - ${ciB.upper}%`;
+                    ctx.fillText(`${group}: ${ciText}`, meanX - 40, ciY - 5);
+                }
+
+                ctx.font = 'bold 12px Roboto Mono';
+                ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+                ctx.fillText(group, graphX + 10, graphY + 20 + groupIndex * 20);
+            });
+
+            if (tempGroups['A'].total > 0 && tempGroups['B'].total > 0) {
+                const diff = Math.abs(meanB - meanA).toFixed(2);
+                const yPos = graphY - 50;
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'purple';
+                ctx.lineWidth = 2;
+                ctx.moveTo(meanAX, yPos);
+                ctx.lineTo(meanBX, yPos);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.strokeStyle = 'purple';
+                ctx.lineWidth = 2;
+                ctx.moveTo(meanAX - 5, yPos - 5);
+                ctx.lineTo(meanAX + 5, yPos + 5);
+                ctx.moveTo(meanAX + 5, yPos - 5);
+                ctx.lineTo(meanAX - 5, yPos + 5);
+                ctx.moveTo(meanBX - 5, yPos - 5);
+                ctx.lineTo(meanBX + 5, yPos + 5);
+                ctx.moveTo(meanBX + 5, yPos - 5);
+                ctx.lineTo(meanBX - 5, yPos + 5);
+                ctx.stroke();
+
+                ctx.font = 'bold 12px Roboto Mono';
+                ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+                const textX = (meanAX + meanBX) / 2 - 30;
+                ctx.fillText(`Разница: ${diff}%`, textX, yPos - 5);
+            }
+
+            ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : 'black';
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY + graphHeight);
+            ctx.lineTo(graphX + graphWidth, graphY + graphHeight);
+            ctx.stroke();
+            ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+            ctx.fillText('Конверсия (0-100%)', graphX + graphWidth / 2 - 50, graphY + graphHeight + 35);
+            for (let i = 0; i <= 100; i += 10) {
+                const x = graphX + (i * graphWidth) / 100;
+                ctx.beginPath();
+                ctx.moveTo(x, graphY + graphHeight);
+                ctx.lineTo(x, graphY + graphHeight + 10);
+                ctx.stroke();
+                ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+                ctx.fillText(i, x - 5, graphY + graphHeight + 30);
+            }
+
+            ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : 'black';
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY + graphHeight);
+            ctx.lineTo(graphX, graphY);
+            ctx.stroke();
+            ctx.save();
+            ctx.translate(graphX - 50, graphY + graphHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+            ctx.fillText('Частота (%)', 0, 0);
+            ctx.restore();
+            for (let i = 0; i <= 5; i++) {
+                const percent = (i / 5) * maxFreqPercent;
+                const y = graphY + graphHeight - (i * graphHeight) / 5;
+                ctx.beginPath();
+                ctx.moveTo(graphX - 5, y);
+                ctx.lineTo(graphX, y);
+                ctx.stroke();
+                ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+                ctx.fillText(percent.toFixed(1), graphX - 35, y + 5);
+            }
+        }
+
+        // Отрисовка Violin Plot
+        function drawViolinPlot(tempGroups) {
+            const graphX = simulationCanvas.width * 0.3;
+            const graphWidth = simulationCanvas.width * 0.65;
+            const graphHeight = simulationCanvas.height - 150;
+            const graphY = simulationCanvas.height - graphHeight - 50;
+
+            const violinData = {
+                'A': { means: tempGroups['A'].means, median: 0, q1: 0, q3: 0, min: 0, max: 0 },
+                'B': { means: tempGroups['B'].means, median: 0, q1: 0, q3: 0, min: 0, max: 0 }
+            };
+
+            Object.keys(violinData).forEach(group => {
+                const means = violinData[group].means;
+                if (means.length > 0) {
+                    means.sort((a, b) => a - b);
+                    violinData[group].median = means[Math.floor(means.length / 2)];
+                    violinData[group].q1 = means[Math.floor(means.length / 4)];
+                    violinData[group].q3 = means[Math.floor(3 * means.length / 4)];
+                    violinData[group].min = means[0];
+                    violinData[group].max = means[means.length - 1];
+                }
+            });
+
+            let maxDensity = 0;
+            Object.keys(tempGroups).forEach(group => {
+                const means = tempGroups[group].means;
+                if (means.length > 10) {
+                    const mean = means.reduce((a, b) => a + b, 0) / means.length;
+                    const std = Math.sqrt(means.reduce((a, b) => a + (b - mean) ** 2, 0) / (means.length - 1)) || 1;
+                    const densityAtMean = normalDensity(mean, mean, std);
+                    maxDensity = Math.max(maxDensity, densityAtMean);
+                }
+            });
+
+            ['A', 'B'].forEach((group, groupIndex) => {
+                const means = tempGroups[group].means;
+                if (means.length > 10) {
+                    const mean = means.reduce((a, b) => a + b, 0) / means.length;
+                    const std = Math.sqrt(means.reduce((a, b) => a + (b - mean) ** 2, 0) / (means.length - 1)) || 1;
+                    const centerX = graphX + (groupIndex + 1) * (graphWidth / 3);
+
+                    ctx.beginPath();
+                    const colors = ['rgba(102, 204, 102, 0.8)', 'rgba(255, 102, 102, 0.8)'];
+                    ctx.fillStyle = colors[groupIndex];
+                    for (let x = 0; x <= 100; x += 0.1) {
+                        const density = normalDensity(x, mean, std);
+                        const width = (density / maxDensity) * 30;
+                        const canvasY = graphY + graphHeight - (x / 100) * graphHeight;
+                        if (x === 0) {
+                            ctx.moveTo(centerX - width, canvasY);
+                        }
+                        ctx.lineTo(centerX - width, canvasY);
+                    }
+                    for (let x = 100; x >= 0; x -= 0.1) {
+                        const density = normalDensity(x, mean, std);
+                        const width = (density / maxDensity) * 30;
+                        const canvasY = graphY + graphHeight - (x / 100) * graphHeight;
+                        ctx.lineTo(centerX + width, canvasY);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+
+                    const medianY = graphY + graphHeight - (violinData[group].median / 100) * graphHeight;
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(centerX - 15, medianY);
+                    ctx.lineTo(centerX + 15, medianY);
+                    ctx.stroke();
+                    ctx.lineWidth = 1;
+
+                    const q1Y = graphY + graphHeight - (violinData[group].q1 / 100) * graphHeight;
+                    const q3Y = graphY + graphHeight - (violinData[group].q3 / 100) * graphHeight;
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#000';
+                    ctx.moveTo(centerX - 10, q1Y);
+                    ctx.lineTo(centerX + 10, q1Y);
+                    ctx.moveTo(centerX - 10, q3Y);
+                    ctx.lineTo(centerX + 10, q3Y);
+                    ctx.stroke();
+
+                    ctx.font = '10px Roboto Mono';
+                    ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : '#333';
+                    ctx.fillText(`Медиана: ${violinData[group].median.toFixed(2)}%`, centerX + 40, medianY);
+                    ctx.fillText(`Q1: ${violinData[group].q1.toFixed(2)}%`, centerX + 40, q1Y);
+                    ctx.fillText(`Q3: ${violinData[group].q3.toFixed(2)}%`, centerX + 40, q3Y);
+                    ctx.fillText(`Группа ${group}`, centerX - 15, graphY + graphHeight + 20);
+                }
+            });
+
+            ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : 'black';
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY + graphHeight);
+            ctx.lineTo(graphX + graphWidth, graphY + graphHeight);
+            ctx.stroke();
+            ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+            ctx.fillText('Конверсия (0-100%)', graphX + graphWidth / 2 - 50, graphY + graphHeight + 35);
+            for (let i = 0; i <= 100; i += 10) {
+                const x = graphX + (i * graphWidth) / 100;
+                ctx.beginPath();
+                ctx.moveTo(x, graphY + graphHeight);
+                ctx.lineTo(x, graphY + graphHeight + 10);
+                ctx.stroke();
+                ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+                ctx.fillText(i, x - 5, graphY + graphHeight + 30);
+            }
+
+            ctx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : 'black';
+            ctx.beginPath();
+            ctx.moveTo(graphX, graphY + graphHeight);
+            ctx.lineTo(graphX, graphY);
+            ctx.stroke();
+            ctx.save();
+            ctx.translate(graphX - 50, graphY + graphHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+            ctx.fillText('Конверсия (%)', 0, 0);
+            ctx.restore();
+        }
+
+// Отрисовка графика изменения конверсий с течением времени
+function drawTimeSeries(tempGroups, selectedVisitorIndex) {
+    timeSeriesCtx.clearRect(0, 0, timeSeriesCanvas.width, timeSeriesCanvas.height);
+
+    const graphX = 50;
+    const graphWidth = timeSeriesCanvas.width - 100;
+    const graphHeight = timeSeriesCanvas.height - 50;
+    const graphY = timeSeriesCanvas.height - graphHeight - 30;
+
+    // Фиксированная ось X: количество посетителей в одной группе = MIN_SAMPLE_SIZE
+    const groupSize = MIN_SAMPLE_SIZE;
+
+    // Новая логика округления для одной группы
+    let xMax;
+    if (groupSize < 1000) {
+        xMax = Math.ceil(groupSize / 250) * 250; // Округляем до ближайшего кратного 250
+    } else if (groupSize < 10000) {
+        xMax = Math.ceil(groupSize / 500) * 500; // Округляем до ближайшего кратного 500
+    } else {
+        xMax = Math.ceil(groupSize / 1000) * 1000; // Округляем до ближайшего кратного 1000
+    }
+
+    // Пример: если MIN_SAMPLE_SIZE = 1095, то xMax = Math.ceil(1095 / 500) * 500 = 1500
+
+    // Найдем максимальную и минимальную конверсию для масштабирования оси Y
+    let maxConversion = 0;
+    let minConversion = 100;
+    ['A', 'B'].forEach(group => {
+        const means = tempGroups[group].means;
+        if (means.length > 0) {
+            const groupMax = Math.max(...means);
+            const groupMin = Math.min(...means);
+            maxConversion = Math.max(maxConversion, groupMax);
+            minConversion = Math.min(minConversion, groupMin);
+        }
+    });
+
+    // Если данных нет, используем разумные значения по умолчанию
+    maxConversion = maxConversion > 0 ? maxConversion : 100;
+    minConversion = minConversion < 100 ? minConversion : 0;
+
+    // Добавим запас в 10% от диапазона для читаемости
+    const range = maxConversion - minConversion;
+    const padding = range * 0.1; // 10% запаса
+    const yMax = Math.ceil((maxConversion + padding) / 5) * 5; // Округляем вверх до кратного 5
+    const yMin = Math.floor((minConversion - padding) / 5) * 5; // Округляем вниз до кратного 5
+    const yRange = yMax - yMin;
+
+    // Оси
+    timeSeriesCtx.strokeStyle = document.body.getAttribute('data-theme') === 'dark' ? '#e0e0e0' : 'black';
+    timeSeriesCtx.beginPath();
+    timeSeriesCtx.moveTo(graphX, graphY + graphHeight);
+    timeSeriesCtx.lineTo(graphX + graphWidth, graphY + graphHeight);
+    timeSeriesCtx.stroke();
+    timeSeriesCtx.beginPath();
+    timeSeriesCtx.moveTo(graphX, graphY + graphHeight);
+    timeSeriesCtx.lineTo(graphX, graphY);
+    timeSeriesCtx.stroke();
+
+    // Подписи осей
+    timeSeriesCtx.fillStyle = document.body.getAttribute('data-theme') === 'dark' ? '#a0a0a0' : '#666';
+    timeSeriesCtx.fillText('Время (посетители в группе)', graphX + graphWidth / 2 - 50, graphY + graphHeight + 25);
+    timeSeriesCtx.save();
+    timeSeriesCtx.translate(graphX - 40, graphY + graphHeight / 2);
+    timeSeriesCtx.rotate(-Math.PI / 2);
+    timeSeriesCtx.fillText('Конверсия (%)', 0, 0);
+    timeSeriesCtx.restore();
+
+    // Метки на оси X (время/посетители) — фиксированные
+    for (let i = 0; i <= xMax; i += Math.ceil(xMax / 5)) {
+        const x = graphX + (i / xMax) * graphWidth;
+        timeSeriesCtx.beginPath();
+        timeSeriesCtx.moveTo(x, graphY + graphHeight);
+        timeSeriesCtx.lineTo(x, graphY + graphHeight + 5);
+        timeSeriesCtx.stroke();
+        timeSeriesCtx.fillText(i, x - 10, graphY + graphHeight + 20);
+    }
+
+    // Метки на оси Y (конверсия) — динамические
+    const yStep = yRange / 5; // Делим ось Y на 5 частей
+    for (let i = yMin; i <= yMax; i += yStep) {
+        const y = graphY + graphHeight - ((i - yMin) / yRange) * graphHeight;
+        timeSeriesCtx.beginPath();
+        timeSeriesCtx.moveTo(graphX - 5, y);
+        timeSeriesCtx.lineTo(graphX, y);
+        timeSeriesCtx.stroke();
+        timeSeriesCtx.fillText(Math.round(i), graphX - 30, y + 5);
+    }
+
+    // Отрисовка кривых конверсий
+    ['A', 'B'].forEach((group, groupIndex) => {
+        const means = tempGroups[group].means;
+        if (means.length > 0) {
+            timeSeriesCtx.beginPath();
+            const colors = ['#66CC66', '#FF6666'];
+            timeSeriesCtx.strokeStyle = colors[groupIndex];
+            timeSeriesCtx.lineWidth = 2;
+
+            // Масштабируем по количеству посетителей в группе
+            const groupTotal = tempGroups[group].total || 1; // Количество посетителей в текущей группе
+            const scaleX = Math.min(groupTotal, xMax); // Масштабируем по количеству посетителей в группе, но не больше xMax
+            for (let i = 0; i < means.length; i++) {
+                const x = graphX + (i / scaleX) * graphWidth; // Масштабируем по количеству посетителей в группе
+                const y = graphY + graphHeight - ((means[i] - yMin) / yRange) * graphHeight; // Масштабируем по динамическому диапазону Y
+                if (i === 0) {
+                    timeSeriesCtx.moveTo(x, y);
+                } else {
+                    timeSeriesCtx.lineTo(x, y);
+                }
+            }
+            timeSeriesCtx.stroke();
+            timeSeriesCtx.lineWidth = 1;
+
+            // Отрисовка линии среднего значения
+            const mean = means.reduce((a, b) => a + b, 0) / means.length;
+            const meanY = graphY + graphHeight - ((mean - yMin) / yRange) * graphHeight;
+            timeSeriesCtx.beginPath();
+            timeSeriesCtx.strokeStyle = colors[groupIndex];
+            timeSeriesCtx.setLineDash([5, 5]); // Пунктирная линия
+            timeSeriesCtx.moveTo(graphX, meanY);
+            timeSeriesCtx.lineTo(graphX + graphWidth, meanY);
+            timeSeriesCtx.stroke();
+            timeSeriesCtx.setLineDash([]); // Сброс пунктира
+
+            // Подпись среднего значения
+            timeSeriesCtx.fillStyle = colors[groupIndex];
+            timeSeriesCtx.fillText(`Среднее ${group}: ${mean.toFixed(2)}%`, graphX + graphWidth - 100, meanY - 10 - groupIndex * 15);
+        }
+    });
+}
+
+        // Определение победителя
+        function determineWinner(tempGroups, pValue) {
+            const meanA = tempGroups['A'].total > 0 ? (tempGroups['A'].conversions / tempGroups['A'].total) * 100 : 0;
+            const meanB = tempGroups['B'].total > 0 ? (tempGroups['B'].conversions / tempGroups['B'].total) * 100 : 0;
+
+            if (pValue >= 0.05) {
+                return { A: 'Ничья', B: 'Ничья' };
+            }
+
+            if (meanA > meanB) {
+                return { A: 'Победитель', B: '' };
+            } else if (meanB > meanA) {
+                return { A: '', B: 'Победитель' };
+            } else {
+                return { A: 'Ничья', B: 'Ничья' };
+            }
+        }
+
+        // Обновление статистики
+        function updateStats(tempGroups) {
+            const pValue = calculatePValue(tempGroups);
+            const winner = determineWinner(tempGroups, pValue);
+
+            let html = '<table>';
+            html += '<tr><th>Группа</th><th>Конверсия</th><th>Ожидаемая</th><th>Реальная</th><th>Посетителей</th><th>Кликнувшие</th><th>Доверительный интервал (95%)</th><th>Победитель</th></tr>';
+            Object.keys(tempGroups).forEach(group => {
+                const mean = tempGroups[group].total > 0 ? (tempGroups[group].conversions / tempGroups[group].total * 100).toFixed(2) : '0.00';
+                const expected = (groups[group].baseRate * 100).toFixed(2);
+                const real = group === 'B' ? (groups[group].realRate * 100).toFixed(2) : '-';
+                const total = tempGroups[group].total;
+                const conversions = tempGroups[group].conversions;
+                const ci = calculateConfidenceInterval(conversions, total);
+                const winnerText = winner[group];
+                const winnerClass = winnerText === 'Победитель' ? 'winner' : '';
+                html += `<tr><td>${group}</td><td>${mean}%</td><td>${expected}%</td><td>${real}%</td><td>${total}</td><td>${conversions}</td><td>${ci.lower}% - ${ci.upper}%</td><td class="${winnerClass}">${winnerText}</td></tr>`;
+            });
+            html += '</table>';
+            html += `<div class="stats-extra">P-value: ${pValue.toFixed(4)} (${pValue < 0.05 ? 'Значимо' : 'Незначимо'})<br>`;
+            html += `Минимальный размер выборки: ${MIN_SAMPLE_SIZE} для каждой группы</div>`;
+            statsDiv.innerHTML = html;
+        }
+
+        // Управление симуляцией
+        function startSimulation() {
+            if (!intervalId) {
+                initGroups();
+                intervalId = setInterval(() => {
+                    addUser();
+                    draw();
+                }, speed / speedFactor);
+            }
+        }
+
+        function speedUp() {
+            speedFactor = Math.min(10, speedFactor * 2);
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    addUser();
+                    draw();
+                }, speed / speedFactor);
+            }
+        }
+
+        function slowDown() {
+            speedFactor = Math.max(0.1, speedFactor / 2);
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = setInterval(() => {
+                    addUser();
+                    draw();
+                }, speed / speedFactor);
+            }
+        }
+
+        function finishSimulation() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                speedFactor = 10;
+                const step = 100;
+                const animateFinish = () => {
+                    if (groups['A'].total < MIN_SAMPLE_SIZE || groups['B'].total < MIN_SAMPLE_SIZE) {
+                        for (let i = 0; i < step && (groups['A'].total < MIN_SAMPLE_SIZE || groups['B'].total < MIN_SAMPLE_SIZE); i++) {
+                            addUser();
+                        }
+                        draw();
+                        intervalId = setTimeout(animateFinish, 50);
+                    } else {
+                        intervalId = null;
+                    }
+                };
+                animateFinish();
+            }
+        }
+
+        // Инициализация
+        loadTheme();
+        initGroups();
+        updateHypothesis();
+        draw();
+    </script>
+</body>
+</html>
